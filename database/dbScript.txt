@@ -1,0 +1,133 @@
+Enum Role {
+
+  admin
+
+  user
+
+  moderator
+
+}
+
+Enum ProductType {
+
+  clothing
+
+  accessory
+
+  toy
+
+  decor
+
+  jewelry
+
+}
+
+Table users {
+
+  userId int [primary key]
+
+  username varchar [not null, unique]
+
+  email varchar [unique, not null]
+
+  password varchar [not null]
+
+  role Role
+
+}
+
+Table products {
+
+  productId int [primary key]
+
+  sellerId int [not null]
+
+  productSlug int [unique, not null]
+
+  productName varchar [not null]
+
+  description varchar [not null]
+
+  productType ProductType [not null]
+
+  price double [not null]
+
+  dateOfCreation date [not null]
+
+  totalPrice double [not null]
+
+  status varchar [not null]
+
+  quantity int [not null]
+
+}
+
+Table product_images {
+
+  pictureId int [primary key]
+
+  productId int [not null]
+
+  imageURL varchar [unique, not null]
+
+}
+
+Table orders {
+
+  orderId int [primary key]
+
+  buyerId int [not null]
+
+}
+
+Table order_products {
+
+  productId int
+
+  orderId int
+
+  quantity int
+
+}
+
+Table ratings {
+
+  ratingId int [primary key]
+
+  userId int
+
+  productId int
+
+  numberOfStars int [not null]
+
+}
+
+Table comments {
+
+  commentId int [primary key]
+
+  userId int [not null]
+
+  productId int [not null]
+
+  commentText varchar [not null]
+
+}
+
+Ref: products.sellerId > users.userId
+
+Ref: product_images.productId > products.productId
+
+Ref: orders.buyerId > users.userId
+
+Ref: order_products.productId > products.productId
+
+Ref: order_products.orderId > orders.orderId
+
+Ref: ratings.userId > users.userId
+
+Ref: ratings.productId > products.productId
+
+Ref: products.productId < comments.productId
+
+Ref: comments.userId > users.userId
