@@ -4,6 +4,9 @@ This repository contains a Postman collection for a Local Artisan Marketplace AP
 
 It is designed to simulate and document a full backend for a handmade products marketplace, including users, products, orders, ratings, comments, and images.
 
+You can find the full API collection here:  
+- [Postman Collection](https://damyangeorgiev-3576030.postman.co/workspace/Damyan-Georgiev's-Workspace~e0f72289-4bf5-43fa-8ee7-8f47f2793959/collection/44594701-db361edf-8cb7-4d4f-9a41-5438f6a5eaf8?action=share&source=copy-link&creator=44594701)
+
 ---
 
 ## Project Overview
