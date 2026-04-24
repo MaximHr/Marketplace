@@ -4,6 +4,7 @@ import com.fmi.springcourse.marketplace.dto.ImageUploadDto;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;
 import com.fmi.springcourse.marketplace.repository.ImageRepository;
 import com.fmi.springcourse.marketplace.service.ImageService;
+import com.fmi.springcourse.marketplace.util.FileTypeValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.unit.DataSize;
@@ -31,6 +32,10 @@ public class ImageServiceImpl implements ImageService {
 					+ " size must be at most "
 					+ maxImageSize.toMegabytes()
 				);
+			}
+			
+			if (!FileTypeValidator.isAllowedImage(img)) {
+				throw new ImageUploadException("Invalid content type.");
 			}
 		}
 		
