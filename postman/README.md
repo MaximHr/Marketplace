@@ -140,6 +140,6 @@ After login:
 
 ### Images
 
-- POST `/products/{id}/images` → Add image (protected)  
+- POST `/images` → Add images (protected)  
 
 - DELETE `/images/{id}` → Delete image (protected)  
