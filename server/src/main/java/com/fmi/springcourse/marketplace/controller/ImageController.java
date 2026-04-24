@@ -3,6 +3,7 @@ package com.fmi.springcourse.marketplace.controller;
 import com.fmi.springcourse.marketplace.dto.ExceptionResponse;
 import com.fmi.springcourse.marketplace.dto.ImageUploadDto;
 import com.fmi.springcourse.marketplace.dto.StringResponse;
+import com.fmi.springcourse.marketplace.exception.ImageDeletionException;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;
 import com.fmi.springcourse.marketplace.service.ImageService;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,12 @@ public class ImageController {
 	
 	@ExceptionHandler(ImageUploadException.class)
 	public ResponseEntity<ExceptionResponse> imageUploadExceptionHandler(ImageUploadException e) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+			.body(new ExceptionResponse(e.getMessage()));
+	}
+	
+	@ExceptionHandler(ImageUploadException.class)
+	public ResponseEntity<ExceptionResponse> imageUploadExceptionHandler(ImageDeletionException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 			.body(new ExceptionResponse(e.getMessage()));
 	}

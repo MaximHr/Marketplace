@@ -1,5 +1,6 @@
 package com.fmi.springcourse.marketplace.repository.impl;
 
+import com.fmi.springcourse.marketplace.exception.ImageDeletionException;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;
 import com.fmi.springcourse.marketplace.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
@@ -58,5 +60,19 @@ public class S3ImageRepository implements ImageRepository {
 	@Override
 	public String singleImageUpload(MultipartFile img) {
 		return putObject(img);
+	}
+	
+	@Override
+	public void removeImage(String id) {
+		try {
+			DeleteObjectRequest request = DeleteObjectRequest.builder()
+				.bucket(bucketName)
+				.key(FOLDER + id)
+				.build();
+			
+			client.deleteObject(request);
+		} catch (S3Exception e) {
+			throw new ImageDeletionException("Could not delete image", e);
+		}
 	}
 }

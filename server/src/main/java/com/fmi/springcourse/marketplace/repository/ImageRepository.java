@@ -8,4 +8,6 @@ public interface ImageRepository {
 	List<String> uploadMultipleImages(List<MultipartFile> images);
 	
 	String singleImageUpload(MultipartFile img);
+	
+	void  removeImage(String id);
 }

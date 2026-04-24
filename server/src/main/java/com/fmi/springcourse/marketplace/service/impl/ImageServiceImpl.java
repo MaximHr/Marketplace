@@ -43,7 +43,6 @@ public class ImageServiceImpl implements ImageService {
 			var ids = List.of(
 				repository.singleImageUpload(images.getFirst())
 			);
-			
 			return new ImageUploadDto(ids);
 		}
 		
@@ -58,6 +57,6 @@ public class ImageServiceImpl implements ImageService {
 	
 	@Override
 	public void removeImage(String id) {
-	
+		repository.removeImage(id);
 	}
 }
