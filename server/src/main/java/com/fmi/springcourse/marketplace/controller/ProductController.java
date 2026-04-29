@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,9 +26,7 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ProductDetails> createProduct(@Valid @RequestBody ProductRequest product, Errors errors) {
-		System.out.println(errors.getFieldErrors());
-		
+	public ResponseEntity<ProductDetails> createProduct(@Valid @RequestBody ProductRequest product) {
 		ProductDetails uploadedProduct = service.createProduct(product);
 		
 		return ResponseEntity
@@ -45,8 +42,7 @@ public class ProductController {
 	}
 	
 	@GetMapping
-	public PageResponse<ProductCardDto> listProducts(Pageable pageable) {
-		return service.listProducts(pageable);
+	public ResponseEntity<PageResponse<ProductCardDto>> listProducts(Pageable pageable) {
+		return ResponseEntity.ok(service.listProducts(pageable));
 	}
-	
 }
