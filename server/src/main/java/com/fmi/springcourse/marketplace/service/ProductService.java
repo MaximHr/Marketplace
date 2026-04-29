@@ -14,4 +14,6 @@ public interface ProductService {
 	PageResponse<ProductCardDto> listProducts(Pageable pageable);
 
 	void deleteProduct(Long id);
+	
+	ProductDetails updateProduct(Long id, ProductRequest req);
 }

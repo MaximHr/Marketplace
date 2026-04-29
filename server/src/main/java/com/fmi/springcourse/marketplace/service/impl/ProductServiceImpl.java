@@ -72,6 +72,19 @@ public class ProductServiceImpl implements ProductService {
 		repository.deleteById(id);
 	}
 	
+	@Override
+	public ProductDetails updateProduct(Long id, ProductRequest req) {
+		var product = repository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException("Could not find product with this id."));
+		
+		product.setDescription(req.getDescription());
+		product.setName(req.getName());
+		product.setPrice(req.getPrice());
+		product.setQuantity(req.getQuantity());
+		
+		return new ProductDetails(repository.save(product));
+	}
+	
 	private void validatePageable(Pageable pageable) {
 		if (pageable.getPageSize() > MAX_PAGE_SIZE || pageable.getPageSize() <= 0) {
 			throw new IllegalArgumentException("Page size is incorrect.");
