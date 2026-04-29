@@ -51,8 +51,9 @@ public class Product {
 	protected Product() {
 	}
 	
-	public Product(String name, BigDecimal price, Integer quantity, ProductType type) {
+	public Product(String name, String description, BigDecimal price, Integer quantity, ProductType type) {
 		this.name = name;
+		this.description = description;
 		this.price = price;
 		this.quantity = quantity;
 		this.type = type;
@@ -75,6 +76,10 @@ public class Product {
 	
 	public String getName() {
 		return name;
+	}
+	
+	public ProductType getType() {
+		return type;
 	}
 	
 	public void setName(String name) {
