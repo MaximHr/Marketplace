@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -20,7 +21,9 @@ import java.util.UUID;
 
 @Getter
 @Entity
-@Table(name = "products")
+@Table(name = "products",
+	indexes = @Index(name = "idx_slug", columnList = "slug", unique = true)
+)
 public class Product {
 	public static final int DESCRIPTION_MAX_LENGTH = 2000;
 	private static final int PRICE_PRECISION = 10;
