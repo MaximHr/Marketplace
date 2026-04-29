@@ -64,6 +64,14 @@ public class ProductServiceImpl implements ProductService {
 			page.getTotalPages());
 	}
 	
+	@Override
+	public void deleteProduct(Long id) {
+		repository.findById(id)
+			.orElseThrow(() -> new EntityNotFoundException("Could not find product with this id."));
+		
+		repository.deleteById(id);
+	}
+	
 	private void validatePageable(Pageable pageable) {
 		if (pageable.getPageSize() > MAX_PAGE_SIZE || pageable.getPageSize() <= 0) {
 			throw new IllegalArgumentException("Page size is incorrect.");

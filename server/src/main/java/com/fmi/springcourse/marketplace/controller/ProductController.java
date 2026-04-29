@@ -1,6 +1,7 @@
 package com.fmi.springcourse.marketplace.controller;
 
 import com.fmi.springcourse.marketplace.dto.PageResponse;
+import com.fmi.springcourse.marketplace.dto.StringResponse;
 import com.fmi.springcourse.marketplace.dto.product.ProductCardDto;
 import com.fmi.springcourse.marketplace.dto.product.ProductDetails;
 import com.fmi.springcourse.marketplace.dto.product.ProductRequest;
@@ -9,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,5 +46,12 @@ public class ProductController {
 	@GetMapping
 	public ResponseEntity<PageResponse<ProductCardDto>> listProducts(Pageable pageable) {
 		return ResponseEntity.ok(service.listProducts(pageable));
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<StringResponse> deleteProduct(@PathVariable Long id) {
+		service.deleteProduct(id);
+		
+		return ResponseEntity.ok(new StringResponse("Product deleted successfully"));
 	}
 }

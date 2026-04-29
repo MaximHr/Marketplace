@@ -12,4 +12,6 @@ public interface ProductService {
 	ProductDetails getProductDetailsBySlug(String slug);
 	
 	PageResponse<ProductCardDto> listProducts(Pageable pageable);
+
+	void deleteProduct(Long id);
 }
