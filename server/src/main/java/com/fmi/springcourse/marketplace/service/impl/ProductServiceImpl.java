@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,9 +56,9 @@ public class ProductServiceImpl implements ProductService {
 		
 		Page<Product> page = repository.findAll(pageable);
 		
-		Set<ProductCardDto> products = page.get()
+		List<ProductCardDto> products = page.get()
 			.map(ProductCardDto::new)
-			.collect(Collectors.toSet());
+			.collect(Collectors.toList());
 		
 		return new PageResponse<>(products, page.getTotalElements(),
 			page.getTotalPages());

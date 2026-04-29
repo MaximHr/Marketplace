@@ -10,12 +10,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
 @Entity
 @Table(name = "products")
 public class Product {
@@ -29,15 +32,19 @@ public class Product {
 	@Column(nullable = false, unique = true)
 	private String slug;
 	
+	@Setter
 	@Column(nullable = false)
 	private String name;
 	
+	@Setter
 	@Column(nullable = false, length = DESCRIPTION_MAX_LENGTH)
 	private String description;
 	
+	@Setter
 	@Column(nullable = false, precision = PRICE_PRECISION, scale = 2)
 	private BigDecimal price;
 	
+	@Setter
 	@Column(nullable = false)
 	private Integer quantity;
 	
@@ -64,53 +71,5 @@ public class Product {
 		if (slug == null || slug.isBlank()) {
 			slug = UUID.randomUUID().toString();
 		}
-	}
-	
-	public Long getId() {
-		return id;
-	}
-	
-	public String getSlug() {
-		return slug;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public ProductType getType() {
-		return type;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
-	
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	
-	public BigDecimal getPrice() {
-		return price;
-	}
-	
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-	
-	public Integer getQuantity() {
-		return quantity;
-	}
-	
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-	
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
 	}
 }
