@@ -1,5 +1,6 @@
 package com.fmi.springcourse.marketplace.dto.product;
 
+import com.fmi.springcourse.marketplace.dto.ImageDto;
 import com.fmi.springcourse.marketplace.entity.Product;
 import com.fmi.springcourse.marketplace.vo.ProductType;
 import jakarta.validation.constraints.DecimalMin;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Setter
 @Getter
@@ -36,6 +38,8 @@ public class ProductRequest {
 	
 	@NotBlank(message = "Main image must be uploaded.")
 	private String mainImage;
+	
+	private List<ImageDto> additionalImages;
 	
 	public ProductRequest() {
 	}

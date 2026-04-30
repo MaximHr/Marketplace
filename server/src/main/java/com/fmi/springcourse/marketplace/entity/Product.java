@@ -1,6 +1,7 @@
 package com.fmi.springcourse.marketplace.entity;
 
 import com.fmi.springcourse.marketplace.vo.ProductType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -9,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
@@ -18,6 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -65,17 +69,22 @@ public class Product {
 	@Enumerated(EnumType.STRING)
 	private ProductType type;
 	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "product_id")
+	private List<Image> additionalImages;
+	
 	protected Product() {
 	}
 	
 	public Product(String name, String description, BigDecimal price, Integer quantity, ProductType type,
-	               String mainImage) {
+	               String mainImage, List<Image> additionalImages) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.quantity = quantity;
 		this.type = type;
 		this.mainImage = mainImage;
+		this.additionalImages = additionalImages;
 	}
 	
 	@PrePersist
