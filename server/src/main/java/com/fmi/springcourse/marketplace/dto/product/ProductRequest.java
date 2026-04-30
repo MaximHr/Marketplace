@@ -34,6 +34,9 @@ public class ProductRequest {
 	@NotNull
 	private ProductType type;
 	
+	@NotBlank(message = "Main image must be uploaded.")
+	private String mainImage;
+	
 	public ProductRequest() {
 	}
 }

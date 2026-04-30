@@ -13,10 +13,12 @@ public record ProductDetails(Long id,
                              BigDecimal price,
                              Integer quantity,
                              ProductType type,
-                             LocalDateTime createdAt) {
+                             LocalDateTime createdAt,
+                             String mainImage) {
 	public ProductDetails(Product product) {
-		this(product.getId(), product.getSlug(), product.getName(), product.getDescription(), product.getPrice(),
-			product.getQuantity(),
-			product.getType(), product.getCreatedAt());
+		this(product.getId(), product.getSlug(), product.getName(), product.getDescription(),
+			product.getPrice(), product.getQuantity(), product.getType(), product.getCreatedAt(),
+			product.getMainImage()
+		);
 	}
 }

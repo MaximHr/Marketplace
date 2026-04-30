@@ -10,4 +10,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	Optional<Product> getBySlug(String slug);
 	
 	List<Product> id(Long id);
+	
 }

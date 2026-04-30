@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "products",
 	indexes = @Index(name = "idx_slug", columnList = "slug", unique = true)
@@ -29,6 +31,7 @@ public class Product {
 	private static final int PRICE_PRECISION = 10;
 	
 	@Id
+	@EqualsAndHashCode.Include
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
@@ -55,18 +58,24 @@ public class Product {
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createdAt;
 	
+	@Setter
+	@Column(nullable = false)
+	private String mainImage;
+	
 	@Enumerated(EnumType.STRING)
 	private ProductType type;
 	
 	protected Product() {
 	}
 	
-	public Product(String name, String description, BigDecimal price, Integer quantity, ProductType type) {
+	public Product(String name, String description, BigDecimal price, Integer quantity, ProductType type,
+	               String mainImage) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.quantity = quantity;
 		this.type = type;
+		this.mainImage = mainImage;
 	}
 	
 	@PrePersist

@@ -6,11 +6,13 @@ import com.fmi.springcourse.marketplace.dto.product.ProductDetails;
 import com.fmi.springcourse.marketplace.dto.product.ProductRequest;
 import com.fmi.springcourse.marketplace.entity.Product;
 import com.fmi.springcourse.marketplace.exception.EntityNotFoundException;
+import com.fmi.springcourse.marketplace.repository.ImageRepository;
 import com.fmi.springcourse.marketplace.repository.ProductRepository;
 import com.fmi.springcourse.marketplace.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,10 +21,12 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
 	private static final int MAX_PAGE_SIZE = 100;
 	
-	private final ProductRepository repository;
+	private final ProductRepository productRepository;
+	private final ImageRepository imageRepository;
 	
-	public ProductServiceImpl(ProductRepository repository) {
-		this.repository = repository;
+	public ProductServiceImpl(ProductRepository productRepository, ImageRepository imageRepository) {
+		this.productRepository = productRepository;
+		this.imageRepository = imageRepository;
 	}
 	
 	@Override
@@ -31,9 +35,9 @@ public class ProductServiceImpl implements ProductService {
 			throw new IllegalArgumentException("Product request can not be null.");
 		}
 		
-		var product = new Product(
-			req.getName(), req.getDescription(), req.getPrice(), req.getQuantity(), req.getType());
-		Product savedProduct = repository.save(product);
+		var product = new Product(req.getName(), req.getDescription(), req.getPrice(), req.getQuantity(),
+			req.getType(), req.getMainImage());
+		Product savedProduct = productRepository.save(product);
 		
 		return new ProductDetails(savedProduct);
 	}
@@ -44,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 			throw new IllegalArgumentException("slug can not be null.");
 		}
 		
-		var product = repository.getBySlug(slug)
+		var product = productRepository.getBySlug(slug)
 			.orElseThrow(() -> new EntityNotFoundException("Product not found"));
 		
 		return new ProductDetails(product);
@@ -54,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
 	public PageResponse<ProductCardDto> listProducts(Pageable pageable) {
 		validatePageable(pageable);
 		
-		Page<Product> page = repository.findAll(pageable);
+		Page<Product> page = productRepository.findAll(pageable);
 		
 		List<ProductCardDto> products = page.get()
 			.map(ProductCardDto::new)
@@ -64,25 +68,28 @@ public class ProductServiceImpl implements ProductService {
 			page.getTotalPages());
 	}
 	
+	@Transactional
 	@Override
 	public void deleteProduct(Long id) {
-		repository.findById(id)
+		var product = productRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("Could not find product with this id."));
 		
-		repository.deleteById(id);
+		imageRepository.removeImage(product.getMainImage());
+		productRepository.deleteById(id);
 	}
 	
 	@Override
 	public ProductDetails updateProduct(Long id, ProductRequest req) {
-		var product = repository.findById(id)
+		var product = productRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("Could not find product with this id."));
 		
 		product.setDescription(req.getDescription());
 		product.setName(req.getName());
 		product.setPrice(req.getPrice());
 		product.setQuantity(req.getQuantity());
+		product.setMainImage(req.getMainImage());
 		
-		return new ProductDetails(repository.save(product));
+		return new ProductDetails(productRepository.save(product));
 	}
 	
 	private void validatePageable(Pageable pageable) {
