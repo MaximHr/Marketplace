@@ -1,6 +1,5 @@
 package com.fmi.springcourse.marketplace.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,25 +12,23 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.rmi.server.UID;
 import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "users")
 @Getter @Setter
-public class User extends SluggableEntity {
+@NoArgsConstructor
+public class User {
     @Id
     @Setter(AccessLevel.NONE)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "userId", updatable = false, nullable = false)
-    private Long id;
+    private UUID id;
 
     @NotBlank
     @Column(nullable = false, unique = true)
@@ -49,11 +46,10 @@ public class User extends SluggableEntity {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
-    private void validate(Long id, String username, String email, String password, UserRole role) {
-        if (id != null && id <= 0) {
-            throw new IllegalArgumentException("Id must be a positive number");
-        }
+    @Column(name = "active")
+    private Boolean active = true; // for user deletion purposes
 
+    private void validate(String username, String email, String password, UserRole role) {
         if (username == null || username.isBlank()) {
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
@@ -71,18 +67,13 @@ public class User extends SluggableEntity {
         }
     }
 
-    public User(Long id, String username, String email, String password, UserRole role) {
-        validate(id, username, email, password, role);
+    public User(String username, String email, String password, UserRole role) {
+        validate(username, email, password, role);
 
-        this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
         this.role = role;
-    }
-
-    public User(String username, String email, String password, UserRole role) {
-        this(null, username, email, password, role);
     }
 
     @Override
