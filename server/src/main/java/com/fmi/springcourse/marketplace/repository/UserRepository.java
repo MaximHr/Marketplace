@@ -1,7 +1,6 @@
 package com.fmi.springcourse.marketplace.repository;
 
-import com.fmi.springcourse.marketplace.dto.user.UserResponseDTO;
-import com.fmi.springcourse.marketplace.model.entity.User;
+import com.fmi.springcourse.marketplace.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

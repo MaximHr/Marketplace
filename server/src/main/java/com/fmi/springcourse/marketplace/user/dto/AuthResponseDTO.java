@@ -1,4 +1,4 @@
-package com.fmi.springcourse.marketplace.dto.user;
+package com.fmi.springcourse.marketplace.user.dto;
 
 public record AuthResponseDTO(String token,
                               UserResponseDTO response) {

@@ -1,12 +1,10 @@
-package com.fmi.springcourse.marketplace.controller;
+package com.fmi.springcourse.marketplace.user;
 
-import com.fmi.springcourse.marketplace.dto.user.AuthResponseDTO;
-import com.fmi.springcourse.marketplace.dto.user.LoginRequestDTO;
-import com.fmi.springcourse.marketplace.dto.user.RegistrationRequestDTO;
-import com.fmi.springcourse.marketplace.dto.user.UserResponseDTO;
-import com.fmi.springcourse.marketplace.dto.user.UserUpdateRequestDTO;
-import com.fmi.springcourse.marketplace.service.AuthService;
-import com.fmi.springcourse.marketplace.service.UserService;
+import com.fmi.springcourse.marketplace.user.dto.AuthResponseDTO;
+import com.fmi.springcourse.marketplace.user.dto.LoginRequestDTO;
+import com.fmi.springcourse.marketplace.user.dto.RegistrationRequestDTO;
+import com.fmi.springcourse.marketplace.user.dto.UserResponseDTO;
+import com.fmi.springcourse.marketplace.user.dto.UserUpdateRequestDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 

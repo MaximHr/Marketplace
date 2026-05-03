@@ -1,4 +1,4 @@
-package com.fmi.springcourse.marketplace.model.entity;
+package com.fmi.springcourse.marketplace.user.entity;
 
 public enum UserRole {
     // MODERATOR ?

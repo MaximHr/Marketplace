@@ -1,4 +1,4 @@
-package com.fmi.springcourse.marketplace.dto.user;
+package com.fmi.springcourse.marketplace.user.dto;
 
 public record LoginRequestDTO(String email,
                               String password) {
