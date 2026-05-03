@@ -6,6 +6,6 @@ import com.fmi.springcourse.marketplace.dto.user.RegistrationRequestDTO;
 import com.fmi.springcourse.marketplace.dto.user.UserResponseDTO;
 
 public interface AuthService {
-    UserResponseDTO register(RegistrationRequestDTO request);
+    AuthResponseDTO register(RegistrationRequestDTO request);
     AuthResponseDTO login(LoginRequestDTO request);
 }
