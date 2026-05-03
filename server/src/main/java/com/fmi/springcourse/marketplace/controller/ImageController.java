@@ -1,7 +1,7 @@
 package com.fmi.springcourse.marketplace.controller;
 
 import com.fmi.springcourse.marketplace.dto.ExceptionResponse;
-import com.fmi.springcourse.marketplace.dto.ImageUploadDto;
+import com.fmi.springcourse.marketplace.dto.ImageDto;
 import com.fmi.springcourse.marketplace.dto.StringResponse;
 import com.fmi.springcourse.marketplace.exception.ImageDeletionException;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;
@@ -29,15 +29,17 @@ public class ImageController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ImageUploadDto> upload(@RequestParam("images") List<MultipartFile> images) {
-		var ids = service.uploadImages(images);
+	public ResponseEntity<List<ImageDto>> upload(@RequestParam("images") List<MultipartFile> images,
+	                                             @RequestParam(value = "productId", required = false) Long productId
+	) {
+		var ids = service.uploadImages(images, productId);
 		
 		return ResponseEntity.ok(ids);
 	}
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<StringResponse> removeHandler(@PathVariable String id) {
-		service.removeImage(id);
+	@DeleteMapping("/{name}")
+	public ResponseEntity<StringResponse> removeHandler(@PathVariable String name) {
+		service.removeImage(name);
 		
 		return ResponseEntity.ok(
 			new StringResponse("Image deleted successfully")
@@ -50,7 +52,7 @@ public class ImageController {
 			.body(new ExceptionResponse(e.getMessage()));
 	}
 	
-	@ExceptionHandler(ImageUploadException.class)
+	@ExceptionHandler(ImageDeletionException.class)
 	public ResponseEntity<ExceptionResponse> imageUploadExceptionHandler(ImageDeletionException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 			.body(new ExceptionResponse(e.getMessage()));
