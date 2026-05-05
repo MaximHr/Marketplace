@@ -23,7 +23,7 @@ public class AuthService {
     private final UserRepository repo;
     private final AuthenticationManager authManager;
     private final UserDetailsService userDetailsService;
-//    private final JwtService jwtService;
+    private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
     private UserResponseDTO mapToResponseDTO(User user) {
@@ -62,8 +62,7 @@ public class AuthService {
         UserDetails userDetails = userDetailsService.
                 loadUserByUsername(request.email());
 
-        String jwt = "fake_token";
-        // jwtService.generateToken(userDetails.getUsername());
+        String jwt = jwtService.generateToken(userDetails.getUsername());
 
         return new AuthResponseDTO(jwt);
     }
