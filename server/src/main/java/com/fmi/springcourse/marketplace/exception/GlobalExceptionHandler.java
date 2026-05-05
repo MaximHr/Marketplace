@@ -1,7 +1,9 @@
 package com.fmi.springcourse.marketplace.exception;
 
 import com.fmi.springcourse.marketplace.dto.ExceptionResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,5 +40,17 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(IllegalArgumentException ex) {
 		return ResponseEntity.badRequest()
 			.body(new ExceptionResponse(ex.getMessage()));
+	}
+
+	@ExceptionHandler(UserAlreadyExistsException.class)
+	public ResponseEntity<ExceptionResponse> handleEntityAlreadyExistException(UserAlreadyExistsException ex) {
+		return ResponseEntity.badRequest()
+				.body(new ExceptionResponse(ex.getMessage()));
+	}
+
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<ExceptionResponse> handleEntityAlreadyExistException(BadCredentialsException ex) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+				.body(new ExceptionResponse(ex.getMessage()));
 	}
 }

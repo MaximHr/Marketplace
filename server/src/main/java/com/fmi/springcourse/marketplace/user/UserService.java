@@ -1,12 +1,13 @@
 package com.fmi.springcourse.marketplace.user;
 
-import com.fmi.springcourse.marketplace.user.dto.UserResponseDTO;
-import com.fmi.springcourse.marketplace.user.dto.UserUpdateRequestDTO;
 import com.fmi.springcourse.marketplace.exception.UserNotActiveException;
 import com.fmi.springcourse.marketplace.exception.UserNotFoundException;
-import com.fmi.springcourse.marketplace.repository.UserRepository;
+import com.fmi.springcourse.marketplace.user.dto.UserResponseDTO;
+import com.fmi.springcourse.marketplace.user.dto.UserUpdateRequestDTO;
 import com.fmi.springcourse.marketplace.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,12 @@ public class UserService {
 
     private UserResponseDTO mapToResponseDTO(User user) {
         return new UserResponseDTO(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getActive());
+    }
+
+    public UserResponseDTO getUserByEmail(String email) {
+        return repo.findByEmail(email)
+                .map(UserResponseDTO::new)
+                .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " was not found"));
     }
 
     public UserResponseDTO getUserById(UUID id) {
@@ -54,7 +61,7 @@ public class UserService {
             throw new UserNotActiveException("Cannot update an inactive user account");
         }
 
-        if (request.username() != null) user.setUsername(request.username());
+        if (request.profileName() != null) user.setProfileName(request.profileName());
         if (request.email() != null) user.setEmail(request.email());
 
         User updated = repo.save(user);
@@ -68,4 +75,7 @@ public class UserService {
                 () -> { throw new UsernameNotFoundException("User with ID: " + id + " was not found"); }
         );
     }
+
+    // ??
+
 }
