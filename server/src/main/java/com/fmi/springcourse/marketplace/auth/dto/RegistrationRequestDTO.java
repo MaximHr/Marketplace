@@ -1,6 +1,6 @@
-package com.fmi.springcourse.marketplace.user.dto;
+package com.fmi.springcourse.marketplace.auth.dto;
 
-public record RegistrationRequestDTO(String username,
+public record RegistrationRequestDTO(String profileName,
                                      String email,
                                      String password) {
 }
