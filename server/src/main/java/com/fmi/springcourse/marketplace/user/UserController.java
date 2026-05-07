@@ -12,13 +12,16 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,21 +29,19 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
-    private final JwtService jwtService;
 
-    // TO BE DELETED
     @GetMapping("/")
     public String home() {
         return "<h1>Welcome</h1>";
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<?> user(@RequestHeader("Authorization") String authToken) {
-        String email = jwtService.extractUsername(authToken.substring(7));
-        UserResponseDTO user = userService.getUserByEmail(email);
-        return ResponseEntity.ok(user);
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
+        String email = authentication.getName();
+        return ResponseEntity.ok(userService.getUser(email));
     }
 
     @GetMapping("/admin")
@@ -48,20 +49,15 @@ public class UserController {
         return "<h1>Welcome Admin</h1>";
     }
 
-    // Still not decided if should delete
-    @GetMapping("/users/{id}")
-    public UserResponseDTO getUser(@PathVariable UUID id) {
-        return userService.getUserById(id);
+    @PatchMapping("/update")
+    public UserResponseDTO updateUser(Authentication authentication, @Valid @RequestBody UserUpdateRequestDTO request) {
+        String email = authentication.getName();
+        return userService.updateUser(email, request);
     }
 
-    @PutMapping("/users/{id}")
-    public UserResponseDTO updateUser(@PathVariable UUID id, @Valid @RequestBody UserUpdateRequestDTO request) {
-        return userService.updateUser(id, request);
-    }
-
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable UUID id) {
-        userService.deleteUser(id);
+    public void deleteUser(@RequestHeader("Authorization") String authToken) {
+        userService.deactivateUser(authToken);
     }
 }
