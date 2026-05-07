@@ -5,9 +5,8 @@ import com.fmi.springcourse.marketplace.exception.UserNotFoundException;
 import com.fmi.springcourse.marketplace.user.dto.UserResponseDTO;
 import com.fmi.springcourse.marketplace.user.dto.UserUpdateRequestDTO;
 import com.fmi.springcourse.marketplace.user.entity.User;
+import com.fmi.springcourse.marketplace.util.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -19,43 +18,31 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository repo;
+    private final JwtService jwtService;
 
     private UserResponseDTO mapToResponseDTO(User user) {
-        return new UserResponseDTO(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getActive());
+        return new UserResponseDTO(user.getId(), user.getProfileName(), user.getEmail(), user.getRole(), user.getActive());
     }
 
-    public UserResponseDTO getUserByEmail(String email) {
+    private Optional<User> findUserByToken(String authToken) {
+        String parsedToken = authToken.substring(7);
+        String email = jwtService.extractUsername(parsedToken);
+        return repo.findByEmail(email);
+    }
+
+    private User findByEmail(String email) {
         return repo.findByEmail(email)
-                .map(UserResponseDTO::new)
-                .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " was not found"));
+                .orElseThrow(() -> new UserNotFoundException(
+                        "User with email: " + email + " was not found"));
     }
 
-    public UserResponseDTO getUserById(UUID id) {
-        Optional<User> userOpt = repo.findById(id);
-
-
-        User user = userOpt.orElseThrow(
-                () -> new UsernameNotFoundException("User with ID: " + id + " was not found")
-        );
-
-        return mapToResponseDTO(user);
-    }
-
-    public List<UserResponseDTO> getAllUsers() {
-        return repo.findAllByActiveIsTrue()
-                .stream()
-                .map(this::mapToResponseDTO)
-                .toList();
+    public UserResponseDTO getUser(String email) {
+        return mapToResponseDTO(findByEmail(email));
     }
 
 //    @Transactional
-    public UserResponseDTO updateUser(UUID id, UserUpdateRequestDTO request) {
-        Optional<User> userOpt = repo.findById(id);
-
-
-        User user = userOpt.orElseThrow(
-                () -> new UserNotFoundException("User with ID: " + id + " was not found")
-        );
+    public UserResponseDTO updateUser(String email, UserUpdateRequestDTO request) {
+        User user = findByEmail(email);
 
         if (!user.getActive()) {
             throw new UserNotActiveException("Cannot update an inactive user account");
@@ -64,18 +51,23 @@ public class UserService {
         if (request.profileName() != null) user.setProfileName(request.profileName());
         if (request.email() != null) user.setEmail(request.email());
 
+        // No need for this line when the @Transaction is used
         User updated = repo.save(user);
         return mapToResponseDTO(updated);
     }
 
 //    @Transactional
-    public void deleteUser(UUID id) {
-        repo.findById(id).ifPresentOrElse(
-                user -> user.setActive(false),
-                () -> { throw new UsernameNotFoundException("User with ID: " + id + " was not found"); }
-        );
+    public void deactivateUser(String authToken) {
+        User user = findUserByToken(authToken)
+                .orElseThrow(() -> new UserNotFoundException("User was not found"));
+
+        if (!user.getActive()) {
+            throw new UserNotActiveException("User already deleted");
+        }
+
+        user.setActive(false);
+        repo.save(user); // remove when using transactional
+
+        // should handle all items that this user have created (they should be also deactivated)
     }
-
-    // ??
-
 }

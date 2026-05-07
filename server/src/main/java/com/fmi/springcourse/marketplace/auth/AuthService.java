@@ -27,7 +27,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
 
     private UserResponseDTO mapToResponseDTO(User user) {
-        return new UserResponseDTO(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getActive());
+        return new UserResponseDTO(user.getId(), user.getProfileName(), user.getEmail(), user.getRole(), user.getActive());
     }
 
     private User mapToUser(RegistrationRequestDTO dto) {
@@ -42,6 +42,10 @@ public class AuthService {
     public void register(RegistrationRequestDTO request) {
         if (repo.existsByEmail(request.email())) {
             throw new UserAlreadyExistsException("User with this email already exists");
+        }
+
+        if (repo.existsByProfileName(request.profileName())) {
+            throw new UserAlreadyExistsException("Profile name is taken. Please try another one");
         }
 
         User user = mapToUser(request);
