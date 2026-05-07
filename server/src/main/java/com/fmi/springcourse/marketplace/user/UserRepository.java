@@ -1,4 +1,4 @@
-package com.fmi.springcourse.marketplace.repository;
+package com.fmi.springcourse.marketplace.user;
 
 import com.fmi.springcourse.marketplace.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,9 +10,9 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
+    boolean existsByProfileName(String profileName);
+
     boolean existsByEmail(String email);
 
-    List<User> findAllByActiveIsTrue();
-
-    Optional<User> findByEmailAndActiveIsTrue(String email);
+    Optional<User> findByEmail(String email);
 }

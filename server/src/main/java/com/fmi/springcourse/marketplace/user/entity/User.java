@@ -11,11 +11,19 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -23,7 +31,7 @@ import java.util.UUID;
 @Table(name = "users")
 @Getter @Setter
 @NoArgsConstructor
-public class User {
+public class User implements UserDetails {
     @Id
     @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,14 +39,16 @@ public class User {
     private UUID id;
 
     @NotBlank
-    @Column(nullable = false, unique = true)
-    private String username;
+    @Column(name = "profileName", nullable = false, unique = true)
+    private String profileName;
 
     @Email @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank
+//    @Pattern(
+//            regexp = "^(?=.*[0-9])(?=.*[a-z]).{8,}$"
+//    )
     @Column(nullable = false)
     private String password; // will store the hashed password
 
@@ -49,9 +59,9 @@ public class User {
     @Column(name = "active")
     private Boolean active = true; // for user deletion purposes
 
-    private void validate(String username, String email, String password, UserRole role) {
-        if (username == null || username.isBlank()) {
-            throw new IllegalArgumentException("Username cannot be null or empty");
+    private void validate(String profileName, String email, String password, UserRole role) {
+        if (profileName == null || profileName.isBlank()) {
+            throw new IllegalArgumentException("Profile name cannot be null or empty");
         }
 
         if (email == null || email.isBlank()) {
@@ -67,10 +77,10 @@ public class User {
         }
     }
 
-    public User(String username, String email, String password, UserRole role) {
-        validate(username, email, password, role);
+    public User(String profileName, String email, String password, UserRole role) {
+        validate(profileName, email, password, role);
 
-        this.username = username;
+        this.profileName = profileName;
         this.email = email;
         this.password = password;
         this.role = role;
@@ -93,9 +103,33 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
+                ", profileName='" + profileName + '\'' +
                 ", email='" + email + '\'' +
                 ", role=" + role +
                 '}';
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() { return true; }
+
+    @Override
+    public boolean isAccountNonLocked() { return true; }
+
+    @Override
+    public boolean isCredentialsNonExpired() { return true; }
 }
