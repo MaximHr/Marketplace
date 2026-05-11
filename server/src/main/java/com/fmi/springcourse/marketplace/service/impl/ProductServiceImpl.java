@@ -7,6 +7,7 @@ import com.fmi.springcourse.marketplace.dto.product.ProductRequest;
 import com.fmi.springcourse.marketplace.entity.Image;
 import com.fmi.springcourse.marketplace.entity.Product;
 import com.fmi.springcourse.marketplace.exception.EntityNotFoundException;
+import com.fmi.springcourse.marketplace.exception.OutOfStockException;
 import com.fmi.springcourse.marketplace.repository.ProductRepository;
 import com.fmi.springcourse.marketplace.repository.impl.S3ImageRepository;
 import com.fmi.springcourse.marketplace.service.ProductService;
@@ -119,5 +120,23 @@ public class ProductServiceImpl implements ProductService {
 		if (pageable.getPageSize() > MAX_PAGE_SIZE || pageable.getPageSize() <= 0) {
 			throw new IllegalArgumentException("Page size is incorrect.");
 		}
+	}
+
+	public Product getProductById(Long id) {
+		return productRepository.findById(id).orElseThrow(() ->
+				new EntityNotFoundException("Product with id: " + id + " was not found"));
+	}
+
+	@Transactional
+	public void deductStock(Long productId, int quantity) {
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+		if (product.getQuantity() < quantity) {
+			throw new OutOfStockException("Low stock for: " + product.getName());
+		}
+
+		product.setQuantity(product.getQuantity() - quantity);
+		productRepository.save(product);
 	}
 }

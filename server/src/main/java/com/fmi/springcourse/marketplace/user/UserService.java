@@ -9,6 +9,7 @@ import com.fmi.springcourse.marketplace.util.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class UserService {
         return mapToResponseDTO(findByEmail(email));
     }
 
-//    @Transactional
+    @Transactional
     public UserResponseDTO updateUser(String email, UserUpdateRequestDTO request) {
         User user = findByEmail(email);
 
@@ -56,7 +57,7 @@ public class UserService {
         return mapToResponseDTO(updated);
     }
 
-//    @Transactional
+    @Transactional
     public void deactivateUser(String authToken) {
         User user = findUserByToken(authToken)
                 .orElseThrow(() -> new UserNotFoundException("User was not found"));
@@ -66,7 +67,7 @@ public class UserService {
         }
 
         user.setActive(false);
-        repo.save(user); // remove when using transactional
+        repo.save(user);
 
         // should handle all items that this user have created (they should be also deactivated)
     }

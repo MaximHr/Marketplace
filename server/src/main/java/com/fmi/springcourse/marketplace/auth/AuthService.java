@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class AuthService {
         return new LoginRequestDTO(user.getEmail(), user.getPassword());
     }
 
-//    @Transactional
+    @Transactional
     public void register(RegistrationRequestDTO request) {
         if (repo.existsByEmail(request.email())) {
             throw new UserAlreadyExistsException("User with this email already exists");
@@ -54,7 +55,6 @@ public class AuthService {
         repo.save(user);
     }
 
-//    @Transactional
     public AuthResponseDTO login(LoginRequestDTO request) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

@@ -7,12 +7,14 @@ import com.fmi.springcourse.marketplace.auth.dto.RegistrationRequestDTO;
 import com.fmi.springcourse.marketplace.exception.UserNotFoundException;
 import com.fmi.springcourse.marketplace.user.dto.UserResponseDTO;
 import com.fmi.springcourse.marketplace.user.dto.UserUpdateRequestDTO;
+import com.fmi.springcourse.marketplace.user.entity.User;
 import com.fmi.springcourse.marketplace.util.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -39,9 +41,8 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
-        String email = authentication.getName();
-        return ResponseEntity.ok(userService.getUser(email));
+    public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal User user) { // fix to @AuthenticationPrincipal User
+        return ResponseEntity.ok(userService.getUser(user.getEmail()));
     }
 
     @GetMapping("/admin")
@@ -50,9 +51,8 @@ public class UserController {
     }
 
     @PatchMapping("/update")
-    public UserResponseDTO updateUser(Authentication authentication, @Valid @RequestBody UserUpdateRequestDTO request) {
-        String email = authentication.getName();
-        return userService.updateUser(email, request);
+    public UserResponseDTO updateUser(@AuthenticationPrincipal User user, @Valid @RequestBody UserUpdateRequestDTO request) {
+        return userService.updateUser(user.getEmail(), request);
     }
 
     @DeleteMapping("/delete")
