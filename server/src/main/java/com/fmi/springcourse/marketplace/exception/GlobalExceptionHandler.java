@@ -1,7 +1,6 @@
 package com.fmi.springcourse.marketplace.exception;
 
 import com.fmi.springcourse.marketplace.dto.ExceptionResponse;
-import io.jsonwebtoken.JwtException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,4 +79,15 @@ public class GlobalExceptionHandler {
 				.body(errors);
 	}
 
+	@ExceptionHandler(OutOfStockException.class)
+	public ResponseEntity<ExceptionResponse> handleOutOfStock(OutOfStockException ex) {
+		return ResponseEntity.status(HttpStatus.CONFLICT)
+				.body(new ExceptionResponse(ex.getMessage()));
+	}
+
+	@ExceptionHandler(CartEmptyException.class)
+	public ResponseEntity<ExceptionResponse> handleEmptyCart(CartEmptyException ex) {
+		return ResponseEntity.badRequest()
+				.body(new ExceptionResponse(ex.getMessage()));
+	}
 }
