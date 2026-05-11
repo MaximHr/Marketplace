@@ -126,4 +126,17 @@ public class ProductServiceImpl implements ProductService {
 		return productRepository.findById(id).orElseThrow(() ->
 				new EntityNotFoundException("Product with id: " + id + " was not found"));
 	}
+
+	@Transactional
+	public void deductStock(Long productId, int quantity) {
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
+
+		if (product.getQuantity() < quantity) {
+			throw new OutOfStockException("Low stock for: " + product.getName());
+		}
+
+		product.setQuantity(product.getQuantity() - quantity);
+		productRepository.save(product);
+	}
 }
