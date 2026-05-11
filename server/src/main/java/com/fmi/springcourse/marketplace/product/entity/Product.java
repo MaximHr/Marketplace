@@ -1,6 +1,6 @@
-package com.fmi.springcourse.marketplace.entity;
+package com.fmi.springcourse.marketplace.product.entity;
 
-import com.fmi.springcourse.marketplace.vo.ProductType;
+import com.fmi.springcourse.marketplace.image.Image;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

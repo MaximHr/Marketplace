@@ -1,4 +1,4 @@
-package com.fmi.springcourse.marketplace.entity;
+package com.fmi.springcourse.marketplace.image;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

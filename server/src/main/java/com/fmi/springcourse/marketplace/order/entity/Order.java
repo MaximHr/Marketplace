@@ -1,6 +1,6 @@
 package com.fmi.springcourse.marketplace.order.entity;
 
-import com.fmi.springcourse.marketplace.entity.Product;
+import com.fmi.springcourse.marketplace.product.entity.Product;
 import com.fmi.springcourse.marketplace.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

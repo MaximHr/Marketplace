@@ -1,8 +1,8 @@
 package com.fmi.springcourse.marketplace.auth;
 
-import com.fmi.springcourse.marketplace.auth.dto.AuthResponseDTO;
-import com.fmi.springcourse.marketplace.auth.dto.LoginRequestDTO;
-import com.fmi.springcourse.marketplace.auth.dto.RegistrationRequestDTO;
+import com.fmi.springcourse.marketplace.auth.dto.AuthResponse;
+import com.fmi.springcourse.marketplace.auth.dto.LoginRequest;
+import com.fmi.springcourse.marketplace.auth.dto.RegistrationRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,14 +19,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationRequestDTO request) {
-        authService.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+    public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegistrationRequest request) {
+        AuthResponse user = authService.register(request);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @RequestBody LoginRequestDTO request) {
-        AuthResponseDTO user = authService.login(request);
+    public ResponseEntity<AuthResponse> loginUser(@Valid @RequestBody LoginRequest request) {
+        AuthResponse user = authService.login(request);
         return ResponseEntity.ok(user);
     }
 }

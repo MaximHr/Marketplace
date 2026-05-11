@@ -1,6 +1,5 @@
 package com.fmi.springcourse.marketplace.cart.dto;
 
-import com.fmi.springcourse.marketplace.entity.Product;
 import jakarta.validation.constraints.Positive;
 
 public record CartItemRequest(

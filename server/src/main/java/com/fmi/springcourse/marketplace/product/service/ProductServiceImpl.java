@@ -1,16 +1,15 @@
-package com.fmi.springcourse.marketplace.service.impl;
+package com.fmi.springcourse.marketplace.product.service;
 
 import com.fmi.springcourse.marketplace.dto.PageResponse;
-import com.fmi.springcourse.marketplace.dto.product.ProductCardDto;
-import com.fmi.springcourse.marketplace.dto.product.ProductDetails;
-import com.fmi.springcourse.marketplace.dto.product.ProductRequest;
-import com.fmi.springcourse.marketplace.entity.Image;
-import com.fmi.springcourse.marketplace.entity.Product;
+import com.fmi.springcourse.marketplace.image.Image;
+import com.fmi.springcourse.marketplace.product.ProductRepository;
+import com.fmi.springcourse.marketplace.product.entity.Product;
 import com.fmi.springcourse.marketplace.exception.EntityNotFoundException;
 import com.fmi.springcourse.marketplace.exception.OutOfStockException;
-import com.fmi.springcourse.marketplace.repository.ProductRepository;
-import com.fmi.springcourse.marketplace.repository.impl.S3ImageRepository;
-import com.fmi.springcourse.marketplace.service.ProductService;
+import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
+import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
+import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
+import com.fmi.springcourse.marketplace.image.repo.S3ImageRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

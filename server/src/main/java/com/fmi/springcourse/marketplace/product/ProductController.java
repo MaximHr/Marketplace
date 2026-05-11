@@ -1,11 +1,11 @@
-package com.fmi.springcourse.marketplace.controller;
+package com.fmi.springcourse.marketplace.product;
 
 import com.fmi.springcourse.marketplace.dto.PageResponse;
 import com.fmi.springcourse.marketplace.dto.StringResponse;
-import com.fmi.springcourse.marketplace.dto.product.ProductCardDto;
-import com.fmi.springcourse.marketplace.dto.product.ProductDetails;
-import com.fmi.springcourse.marketplace.dto.product.ProductRequest;
-import com.fmi.springcourse.marketplace.service.ProductService;
+import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
+import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
+import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
+import com.fmi.springcourse.marketplace.product.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

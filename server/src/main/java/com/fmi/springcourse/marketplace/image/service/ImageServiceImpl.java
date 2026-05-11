@@ -1,14 +1,13 @@
-package com.fmi.springcourse.marketplace.service.impl;
+package com.fmi.springcourse.marketplace.image.service;
 
-import com.fmi.springcourse.marketplace.dto.ImageDto;
-import com.fmi.springcourse.marketplace.entity.Image;
-import com.fmi.springcourse.marketplace.entity.Product;
+import com.fmi.springcourse.marketplace.image.Image;
+import com.fmi.springcourse.marketplace.image.ImageDto;
+import com.fmi.springcourse.marketplace.image.repo.DbImageRepository;
+import com.fmi.springcourse.marketplace.image.repo.S3ImageRepository;
+import com.fmi.springcourse.marketplace.product.entity.Product;
 import com.fmi.springcourse.marketplace.exception.EntityNotFoundException;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;
-import com.fmi.springcourse.marketplace.repository.DbImageRepository;
-import com.fmi.springcourse.marketplace.repository.ProductRepository;
-import com.fmi.springcourse.marketplace.repository.impl.S3ImageRepository;
-import com.fmi.springcourse.marketplace.service.ImageService;
+import com.fmi.springcourse.marketplace.product.ProductRepository;
 import com.fmi.springcourse.marketplace.util.FileTypeValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

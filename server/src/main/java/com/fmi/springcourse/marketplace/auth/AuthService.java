@@ -1,8 +1,8 @@
 package com.fmi.springcourse.marketplace.auth;
 
-import com.fmi.springcourse.marketplace.auth.dto.AuthResponseDTO;
-import com.fmi.springcourse.marketplace.auth.dto.LoginRequestDTO;
-import com.fmi.springcourse.marketplace.auth.dto.RegistrationRequestDTO;
+import com.fmi.springcourse.marketplace.auth.dto.AuthResponse;
+import com.fmi.springcourse.marketplace.auth.dto.LoginRequest;
+import com.fmi.springcourse.marketplace.auth.dto.RegistrationRequest;
 import com.fmi.springcourse.marketplace.exception.UserAlreadyExistsException;
 import com.fmi.springcourse.marketplace.user.UserRepository;
 import com.fmi.springcourse.marketplace.user.dto.UserResponseDTO;
@@ -23,24 +23,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final UserRepository repo;
     private final AuthenticationManager authManager;
-    private final UserDetailsService userDetailsService;
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    private UserResponseDTO mapToResponseDTO(User user) {
-        return new UserResponseDTO(user.getId(), user.getProfileName(), user.getEmail(), user.getRole(), user.getActive());
-    }
-
-    private User mapToUser(RegistrationRequestDTO dto) {
-        return new User(dto.profileName(), dto.email(), dto.password(), UserRole.USER);
-    }
-
-    private LoginRequestDTO mapToLoginRequest(User user) {
-        return new LoginRequestDTO(user.getEmail(), user.getPassword());
+    private User mapToUser(RegistrationRequest dto) {
+        return new User(
+                dto.profileName(),
+                dto.email(),
+                passwordEncoder.encode(dto.password()),
+                UserRole.USER
+        );
     }
 
     @Transactional
-    public void register(RegistrationRequestDTO request) {
+    public AuthResponse register(RegistrationRequest request) {
         if (repo.existsByEmail(request.email())) {
             throw new UserAlreadyExistsException("User with this email already exists");
         }
@@ -50,12 +46,13 @@ public class AuthService {
         }
 
         User user = mapToUser(request);
-        user.setPassword(passwordEncoder.encode(request.password()));
-
         repo.save(user);
+
+        String jwt = jwtService.generateToken(user.getUsername());
+        return new AuthResponse(jwt);
     }
 
-    public AuthResponseDTO login(LoginRequestDTO request) {
+    public AuthResponse login(LoginRequest request) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
@@ -63,11 +60,7 @@ public class AuthService {
                 )
         );
 
-        UserDetails userDetails = userDetailsService.
-                loadUserByUsername(request.email());
-
-        String jwt = jwtService.generateToken(userDetails.getUsername());
-
-        return new AuthResponseDTO(jwt);
+        String jwt = jwtService.generateToken(request.email());
+        return new AuthResponse(jwt);
     }
 }

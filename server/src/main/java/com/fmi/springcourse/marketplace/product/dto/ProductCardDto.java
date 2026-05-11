@@ -1,6 +1,6 @@
-package com.fmi.springcourse.marketplace.dto.product;
+package com.fmi.springcourse.marketplace.product.dto;
 
-import com.fmi.springcourse.marketplace.entity.Product;
+import com.fmi.springcourse.marketplace.product.entity.Product;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -1,9 +1,9 @@
-package com.fmi.springcourse.marketplace.service;
+package com.fmi.springcourse.marketplace.product.service;
 
 import com.fmi.springcourse.marketplace.dto.PageResponse;
-import com.fmi.springcourse.marketplace.dto.product.ProductCardDto;
-import com.fmi.springcourse.marketplace.dto.product.ProductDetails;
-import com.fmi.springcourse.marketplace.dto.product.ProductRequest;
+import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
+import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
+import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductService {

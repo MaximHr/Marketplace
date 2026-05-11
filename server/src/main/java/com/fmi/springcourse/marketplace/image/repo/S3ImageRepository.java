@@ -1,4 +1,4 @@
-package com.fmi.springcourse.marketplace.repository.impl;
+package com.fmi.springcourse.marketplace.image.repo;
 
 import com.fmi.springcourse.marketplace.exception.ImageDeletionException;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;

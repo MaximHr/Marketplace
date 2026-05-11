@@ -1,11 +1,10 @@
-package com.fmi.springcourse.marketplace.controller;
+package com.fmi.springcourse.marketplace.image;
 
 import com.fmi.springcourse.marketplace.dto.ExceptionResponse;
-import com.fmi.springcourse.marketplace.dto.ImageDto;
 import com.fmi.springcourse.marketplace.dto.StringResponse;
 import com.fmi.springcourse.marketplace.exception.ImageDeletionException;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;
-import com.fmi.springcourse.marketplace.service.ImageService;
+import com.fmi.springcourse.marketplace.image.service.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

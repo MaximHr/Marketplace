@@ -1,6 +1,6 @@
 package com.fmi.springcourse.marketplace.cart.entity;
 
-import com.fmi.springcourse.marketplace.entity.Product;
+import com.fmi.springcourse.marketplace.product.entity.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

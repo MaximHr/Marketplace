@@ -1,6 +1,4 @@
-package com.fmi.springcourse.marketplace.dto;
-
-import com.fmi.springcourse.marketplace.entity.Image;
+package com.fmi.springcourse.marketplace.image;
 
 public record ImageDto(String name) {
 	public ImageDto(Image image) {

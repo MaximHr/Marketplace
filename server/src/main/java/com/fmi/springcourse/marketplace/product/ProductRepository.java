@@ -1,6 +1,6 @@
-package com.fmi.springcourse.marketplace.repository;
+package com.fmi.springcourse.marketplace.product;
 
-import com.fmi.springcourse.marketplace.entity.Product;
+import com.fmi.springcourse.marketplace.product.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,14 +1,12 @@
 package com.fmi.springcourse.marketplace.order;
 
-import com.fmi.springcourse.marketplace.cart.CartRepository;
 import com.fmi.springcourse.marketplace.cart.CartService;
 import com.fmi.springcourse.marketplace.cart.entity.Cart;
 import com.fmi.springcourse.marketplace.cart.entity.CartItem;
-import com.fmi.springcourse.marketplace.entity.Product;
 import com.fmi.springcourse.marketplace.exception.CartEmptyException;
 import com.fmi.springcourse.marketplace.order.dto.OrderResponse;
 import com.fmi.springcourse.marketplace.order.entity.Order;
-import com.fmi.springcourse.marketplace.service.impl.ProductServiceImpl;
+import com.fmi.springcourse.marketplace.product.service.ProductServiceImpl;
 import com.fmi.springcourse.marketplace.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

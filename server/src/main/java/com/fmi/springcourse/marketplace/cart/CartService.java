@@ -2,10 +2,10 @@ package com.fmi.springcourse.marketplace.cart;
 
 import com.fmi.springcourse.marketplace.cart.dto.CartResponse;
 import com.fmi.springcourse.marketplace.cart.entity.Cart;
-import com.fmi.springcourse.marketplace.entity.Product;
+import com.fmi.springcourse.marketplace.product.entity.Product;
 import com.fmi.springcourse.marketplace.exception.EntityNotFoundException;
 import com.fmi.springcourse.marketplace.exception.OutOfStockException;
-import com.fmi.springcourse.marketplace.service.impl.ProductServiceImpl;
+import com.fmi.springcourse.marketplace.product.service.ProductServiceImpl;
 import com.fmi.springcourse.marketplace.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

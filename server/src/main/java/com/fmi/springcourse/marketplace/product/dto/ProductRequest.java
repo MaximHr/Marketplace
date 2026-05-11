@@ -1,8 +1,8 @@
-package com.fmi.springcourse.marketplace.dto.product;
+package com.fmi.springcourse.marketplace.product.dto;
 
-import com.fmi.springcourse.marketplace.dto.ImageDto;
-import com.fmi.springcourse.marketplace.entity.Product;
-import com.fmi.springcourse.marketplace.vo.ProductType;
+import com.fmi.springcourse.marketplace.image.ImageDto;
+import com.fmi.springcourse.marketplace.product.entity.Product;
+import com.fmi.springcourse.marketplace.product.entity.ProductType;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

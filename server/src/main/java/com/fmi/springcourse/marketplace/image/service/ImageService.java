@@ -1,6 +1,6 @@
-package com.fmi.springcourse.marketplace.service;
+package com.fmi.springcourse.marketplace.image.service;
 
-import com.fmi.springcourse.marketplace.dto.ImageDto;
+import com.fmi.springcourse.marketplace.image.ImageDto;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
