@@ -1,7 +1,5 @@
-package com.fmi.springcourse.marketplace.auth;
+package com.fmi.springcourse.marketplace.user;
 
-import com.fmi.springcourse.marketplace.user.UserRepository;
-import com.fmi.springcourse.marketplace.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.security.core.userdetails.UserDetails;
