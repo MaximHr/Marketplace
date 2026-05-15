@@ -1,5 +1,6 @@
 package com.fmi.springcourse.marketplace.image.service;
 
+import com.fmi.springcourse.marketplace.exception.AccessDeniedException;
 import com.fmi.springcourse.marketplace.image.Image;
 import com.fmi.springcourse.marketplace.image.ImageDto;
 import com.fmi.springcourse.marketplace.image.repo.DbImageRepository;
@@ -8,6 +9,7 @@ import com.fmi.springcourse.marketplace.product.entity.Product;
 import com.fmi.springcourse.marketplace.exception.EntityNotFoundException;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;
 import com.fmi.springcourse.marketplace.product.ProductRepository;
+import com.fmi.springcourse.marketplace.user.entity.User;
 import com.fmi.springcourse.marketplace.util.FileTypeValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,21 +38,25 @@ public class ImageServiceImpl implements ImageService {
 	
 	@Transactional
 	@Override
-	public List<ImageDto> uploadImages(List<MultipartFile> images, Long productId) {
+	public List<ImageDto> uploadImages(List<MultipartFile> images, Long productId, User user) {
 		validateImages(images);
 		
 		if (images.size() == 1) {
-			return uploadSingleImage(images, productId);
+			return uploadSingleImage(images, productId, user);
 		}
 		
 		var names = s3ImageRepository.uploadMultipleImages(images);
 		
 		if (productId != null) {
 			Product product = productRepository.findById(productId)
-				.orElseThrow();
+				.orElseThrow(() -> new EntityNotFoundException("Product not found."));
+			
+			if (!product.getUser().equals(user)) {
+				throw new AccessDeniedException("Illegal operation.");
+			}
 			
 			var imgList = names.stream()
-				.map(Image::new)
+				.map(name -> new Image(name, product))
 				.toList();
 			
 			product.getAdditionalImages()
@@ -79,15 +85,18 @@ public class ImageServiceImpl implements ImageService {
 		}
 	}
 	
-	private List<ImageDto> uploadSingleImage(List<MultipartFile> images, Long productId) {
+	private List<ImageDto> uploadSingleImage(List<MultipartFile> images, Long productId, User user) {
 		String name = s3ImageRepository.singleImageUpload(images.getFirst());
 		
 		if (productId != null) {
 			Product product = productRepository.findById(productId)
 				.orElseThrow(() -> new EntityNotFoundException("No such product"));
 			
+			if (!product.getUser().equals(user)) {
+				throw new AccessDeniedException("Illegal operation.");
+			}
 			product.getAdditionalImages()
-				.add(new Image(name));
+				.add(new Image(name, product));
 			
 			productRepository.save(product);
 		}
@@ -101,7 +110,15 @@ public class ImageServiceImpl implements ImageService {
 	
 	@Transactional
 	@Override
-	public void removeImage(String nameInBucket) {
+	public void removeImage(String nameInBucket, User user) {
+		var image = dbImageRepository.findByNameInBucket(nameInBucket)
+				.orElseThrow(() -> new EntityNotFoundException("Image does not exist."));
+		
+		var owner = image.getProduct().getUser();
+		if (!owner.equals(user)) {
+			throw new AccessDeniedException("Illegal operation.");
+		}
+		
 		s3ImageRepository.removeImage(nameInBucket);
 		dbImageRepository.deleteByNameInBucket(nameInBucket);
 	}

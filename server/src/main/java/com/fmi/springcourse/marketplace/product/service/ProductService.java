@@ -4,16 +4,17 @@ import com.fmi.springcourse.marketplace.dto.PageResponse;
 import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
 import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
 import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
+import com.fmi.springcourse.marketplace.user.entity.User;
 import org.springframework.data.domain.Pageable;
 
 public interface ProductService {
-	ProductDetails createProduct(ProductRequest product);
+	ProductDetails createProduct(ProductRequest product, User user);
 	
 	ProductDetails getProductDetailsBySlug(String slug);
 	
 	PageResponse<ProductCardDto> listProducts(Pageable pageable);
 
-	void deleteProduct(Long id);
+	void deleteProduct(Long id, User user);
 	
-	ProductDetails updateProduct(Long id, ProductRequest req);
+	ProductDetails updateProduct(Long id, ProductRequest req, User user);
 }

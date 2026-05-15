@@ -1,7 +1,9 @@
 package com.fmi.springcourse.marketplace.product.service;
 
 import com.fmi.springcourse.marketplace.dto.PageResponse;
+import com.fmi.springcourse.marketplace.exception.AccessDeniedException;
 import com.fmi.springcourse.marketplace.image.Image;
+import com.fmi.springcourse.marketplace.image.repo.DbImageRepository;
 import com.fmi.springcourse.marketplace.product.ProductRepository;
 import com.fmi.springcourse.marketplace.product.entity.Product;
 import com.fmi.springcourse.marketplace.exception.EntityNotFoundException;
@@ -10,6 +12,7 @@ import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
 import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
 import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
 import com.fmi.springcourse.marketplace.image.repo.S3ImageRepository;
+import com.fmi.springcourse.marketplace.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,23 +29,32 @@ public class ProductServiceImpl implements ProductService {
 	
 	private final ProductRepository productRepository;
 	private final S3ImageRepository imageRepository;
+	private final DbImageRepository dbImageRepository;
 	
-	public ProductServiceImpl(ProductRepository productRepository, S3ImageRepository imageRepository) {
+	public ProductServiceImpl(ProductRepository productRepository, S3ImageRepository imageRepository,
+	                          DbImageRepository dbImageRepository) {
 		this.productRepository = productRepository;
 		this.imageRepository = imageRepository;
+		this.dbImageRepository = dbImageRepository;
 	}
 	
 	@Transactional
 	@Override
-	public ProductDetails createProduct(ProductRequest req) {
+	public ProductDetails createProduct(ProductRequest req, User user) {
 		if (req == null) {
 			throw new IllegalArgumentException("Product request can not be null.");
 		}
 		
+		List<Image> images = getAdditionalImages(req);
 		var product = new Product(req.getName(), req.getDescription(), req.getPrice(), req.getQuantity(),
-			req.getType(), req.getMainImage(), getAdditionalImages(req));
+			req.getType(), req.getMainImage(), images, user);
+		
+		for (var img : images) {
+			img.setProduct(product);
+		}
 		
 		Product savedProduct = productRepository.save(product);
+		dbImageRepository.saveAll(images);
 		
 		return new ProductDetails(savedProduct);
 	}
@@ -51,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
 		if (req.getAdditionalImages() != null) {
 			return req.getAdditionalImages()
 				.stream()
-				.map(dto -> new Image(dto.name()))
+				.map(dto -> new Image(dto.name(), null))
 				.toList();
 		}
 		
@@ -87,9 +99,13 @@ public class ProductServiceImpl implements ProductService {
 	
 	@Transactional
 	@Override
-	public void deleteProduct(Long id) {
+	public void deleteProduct(Long id, User user) {
 		var product = productRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("Could not find product with this id."));
+		
+		if (!product.getUser().equals(user)) {
+			throw new AccessDeniedException("You do not have the rights to delete the current product.");
+		}
 		
 		imageRepository.removeImage(product.getMainImage());
 		
@@ -102,9 +118,13 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public ProductDetails updateProduct(Long id, ProductRequest req) {
+	public ProductDetails updateProduct(Long id, ProductRequest req, User user) {
 		var product = productRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("Could not find product with this id."));
+		
+		if (!product.getUser().equals(user)) {
+			throw new AccessDeniedException("You do not have the rights to update the current product.");
+		}
 		
 		product.setDescription(req.getDescription());
 		product.setName(req.getName());
@@ -120,21 +140,21 @@ public class ProductServiceImpl implements ProductService {
 			throw new IllegalArgumentException("Page size is incorrect.");
 		}
 	}
-
+	
 	public Product getProductById(Long id) {
 		return productRepository.findById(id).orElseThrow(() ->
-				new EntityNotFoundException("Product with id: " + id + " was not found"));
+			new EntityNotFoundException("Product with id: " + id + " was not found"));
 	}
-
+	
 	@Transactional
 	public void deductStock(Long productId, int quantity) {
 		Product product = productRepository.findById(productId)
-				.orElseThrow(() -> new EntityNotFoundException("Product not found"));
-
+			.orElseThrow(() -> new EntityNotFoundException("Product not found"));
+		
 		if (product.getQuantity() < quantity) {
 			throw new OutOfStockException("Low stock for: " + product.getName());
 		}
-
+		
 		product.setQuantity(product.getQuantity() - quantity);
 		productRepository.save(product);
 	}

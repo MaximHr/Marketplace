@@ -1,16 +1,19 @@
 package com.fmi.springcourse.marketplace.product.entity;
 
 import com.fmi.springcourse.marketplace.image.Image;
+import com.fmi.springcourse.marketplace.user.entity.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
@@ -69,15 +72,19 @@ public class Product {
 	@Enumerated(EnumType.STRING)
 	private ProductType type;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JoinColumn(name = "product_id")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
 	private List<Image> additionalImages;
+	
+	@Getter
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 	
 	protected Product() {
 	}
 	
 	public Product(String name, String description, BigDecimal price, Integer quantity, ProductType type,
-	               String mainImage, List<Image> additionalImages) {
+	               String mainImage, List<Image> additionalImages, User user) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
@@ -85,6 +92,7 @@ public class Product {
 		this.type = type;
 		this.mainImage = mainImage;
 		this.additionalImages = additionalImages;
+		this.user = user;
 	}
 	
 	@PrePersist

@@ -5,8 +5,10 @@ import com.fmi.springcourse.marketplace.dto.StringResponse;
 import com.fmi.springcourse.marketplace.exception.ImageDeletionException;
 import com.fmi.springcourse.marketplace.exception.ImageUploadException;
 import com.fmi.springcourse.marketplace.image.service.ImageService;
+import com.fmi.springcourse.marketplace.user.entity.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,17 +30,19 @@ public class ImageController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<List<ImageDto>> upload(@RequestParam("images") List<MultipartFile> images,
+	public ResponseEntity<List<ImageDto>> upload(@AuthenticationPrincipal User user,
+	                                             @RequestParam("images") List<MultipartFile> images,
 	                                             @RequestParam(value = "productId", required = false) Long productId
 	) {
-		var ids = service.uploadImages(images, productId);
+		var ids = service.uploadImages(images, productId, user);
 		
 		return ResponseEntity.ok(ids);
 	}
 	
 	@DeleteMapping("/{name}")
-	public ResponseEntity<StringResponse> removeHandler(@PathVariable String name) {
-		service.removeImage(name);
+	public ResponseEntity<StringResponse> removeHandler(@AuthenticationPrincipal User user,
+	                                                    @PathVariable String name) {
+		service.removeImage(name, user);
 		
 		return ResponseEntity.ok(
 			new StringResponse("Image deleted successfully")

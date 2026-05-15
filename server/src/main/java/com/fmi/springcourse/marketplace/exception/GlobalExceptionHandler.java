@@ -65,9 +65,15 @@ public class GlobalExceptionHandler {
 	}
 
 	@ExceptionHandler(BadCredentialsException.class)
-	public ResponseEntity<ExceptionResponse> handleEntityAlreadyExistException(BadCredentialsException ex) {
+	public ResponseEntity<ExceptionResponse> handleBadCredentialsException(BadCredentialsException ex) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 				.body(new ExceptionResponse("Invalid credentials"));
+	}
+	
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<ExceptionResponse> handleAccessDenied(AccessDeniedException ex) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN)
+			.body(new ExceptionResponse(ex.getMessage()));
 	}
 
 	@ExceptionHandler(ConstraintViolationException.class)

@@ -6,10 +6,12 @@ import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
 import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
 import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
 import com.fmi.springcourse.marketplace.product.service.ProductService;
+import com.fmi.springcourse.marketplace.user.entity.User;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +31,9 @@ public class ProductController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<ProductDetails> createProduct(@Valid @RequestBody ProductRequest product) {
-		ProductDetails uploadedProduct = service.createProduct(product);
+	public ResponseEntity<ProductDetails> createProduct(@AuthenticationPrincipal User user,
+	                                                    @Valid @RequestBody ProductRequest product) {
+		ProductDetails uploadedProduct = service.createProduct(product, user);
 		
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
@@ -51,17 +54,18 @@ public class ProductController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<ProductDetails> updateProduct(
+		@AuthenticationPrincipal User user,
 		@PathVariable Long id,
 		@Valid @RequestBody ProductRequest product
 	) {
-		ProductDetails updatedProduct = service.updateProduct(id, product);
+		ProductDetails updatedProduct = service.updateProduct(id, product, user);
 		
 		return ResponseEntity.ok(updatedProduct);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<StringResponse> deleteProduct(@PathVariable Long id) {
-		service.deleteProduct(id);
+	public ResponseEntity<StringResponse> deleteProduct(@AuthenticationPrincipal User user, @PathVariable Long id) {
+		service.deleteProduct(id, user);
 		
 		return ResponseEntity.ok(new StringResponse("Product deleted successfully"));
 	}
