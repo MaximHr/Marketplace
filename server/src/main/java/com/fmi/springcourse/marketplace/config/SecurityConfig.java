@@ -22,34 +22,34 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 	private final JwtRequestFilter jwtRequestFilter;
 	private final AuthenticationEntryPoint jwtAuthenticationEntryPoint;
-
+	
 	@Bean
 	SecurityFilterChain configure(HttpSecurity http) throws Exception {
 		http
-				.csrf(AbstractHttpConfigurer::disable)
-				.sessionManagement(session ->
-						session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-				)
-
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/auth/**").permitAll()
-
-						.requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-
-						.anyRequest().authenticated()
-				)
-
-				.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
-
+			.csrf(AbstractHttpConfigurer::disable)
+			.sessionManagement(session ->
+				session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			)
+			
+			.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/auth/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+				.anyRequest().authenticated()
+			)
+			
+			.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+		
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
-
+	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
+	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
 		return config.getAuthenticationManager();

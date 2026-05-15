@@ -117,6 +117,7 @@ public class ProductServiceImpl implements ProductService {
 		productRepository.deleteById(id);
 	}
 	
+	@Transactional
 	@Override
 	public ProductDetails updateProduct(Long id, ProductRequest req, User user) {
 		var product = productRepository.findById(id)
