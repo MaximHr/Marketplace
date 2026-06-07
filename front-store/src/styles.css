@@ -10,7 +10,8 @@ a, button {
 
 @theme {
   --color-primary: #20652f;
-  --color-secondary: #efee5e;
+  --color-accent: #efee5e;
+  --color-secondary: #def0f2;
 	--color-soft: #eee;
 }
 
