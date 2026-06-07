@@ -8,6 +8,12 @@ a, button {
 	cursor: pointer;
 }
 
+@theme {
+  --color-primary: #20652f;
+  --color-secondary: #efee5e;
+	--color-soft: #eee;
+}
+
 @keyframes floatAnimation {
 	0% {
 		transform: translateY(0);
