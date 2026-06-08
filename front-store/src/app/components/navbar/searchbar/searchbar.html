@@ -1,0 +1,9 @@
+<div class="flex items-center relative font-medium">
+  <input
+    type="text"
+    placeholder="Search..."
+		[formField]="textForm"
+    class="text-[#444] pr-12 pl-5 w-75 bg-soft py-2.5 rounded-full placeholder-[#555]"
+  />
+  <img (click)="search()" class="cursor-pointer absolute size-5 right-5" src="assets/icons/search.svg" alt="search icon" />
+</div>
