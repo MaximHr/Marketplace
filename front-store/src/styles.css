@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import 'ngx-toastr/toastr';
 
 * {
   font-family: "Poppins", sans-serif;
@@ -29,10 +30,28 @@ a, button {
 	}
 }
 
+@keyframes showAnimation {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.show {
+	animation: showAnimation 1s ease forwards;
+}
+
 .float {
 	animation: floatAnimation 5s ease-in-out forwards infinite;
 }
 
 .float:nth-of-type(3) {
 	animation-delay: -2.5s;
+}
+
+.ngx-toastr {
+	box-shadow: none !important;
+	background-color: #e64d3d !important;
 }
