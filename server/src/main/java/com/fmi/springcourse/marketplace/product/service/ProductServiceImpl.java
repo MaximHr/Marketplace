@@ -5,6 +5,7 @@ import com.fmi.springcourse.marketplace.exception.AccessDeniedException;
 import com.fmi.springcourse.marketplace.image.Image;
 import com.fmi.springcourse.marketplace.image.repo.DbImageRepository;
 import com.fmi.springcourse.marketplace.product.ProductRepository;
+import com.fmi.springcourse.marketplace.product.dto.ProductTypeDto;
 import com.fmi.springcourse.marketplace.product.entity.Product;
 import com.fmi.springcourse.marketplace.exception.EntityNotFoundException;
 import com.fmi.springcourse.marketplace.exception.OutOfStockException;
@@ -12,6 +13,7 @@ import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
 import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
 import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
 import com.fmi.springcourse.marketplace.image.repo.S3ImageRepository;
+import com.fmi.springcourse.marketplace.product.entity.ProductType;
 import com.fmi.springcourse.marketplace.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -134,6 +137,13 @@ public class ProductServiceImpl implements ProductService {
 		product.setMainImage(req.getMainImage());
 		
 		return new ProductDetails(productRepository.save(product));
+	}
+	
+	@Override
+	public List<ProductTypeDto> listCategories() {
+		return Arrays.stream(ProductType.values())
+			.map(ProductTypeDto::new)
+			.toList();
 	}
 	
 	private void validatePageable(Pageable pageable) {

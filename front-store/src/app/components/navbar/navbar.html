@@ -1,18 +1,25 @@
-<div class="flex justify-between items-center py-4 px-12 font-semibold text-[15px]">
+<div
+  class="shadow-xs h-20 sticky bg-white w-full top-0 z-20 flex justify-between items-center py-4 px-12 font-semibold text-[15px]"
+>
+  <div class="absolute w-0">
+    @if (isDropDownOpen()) {
+      <dropdown [categories]="categories()" [toggleOpen]="() => toggleOpen()" />
+    }
+  </div>
   <div class="flex items-center gap-6">
     <a [routerLink]="['/']" class="hover:text-[#333] flex items-center gap-2 cursor-pointer mr-3">
       <img class="size-12" src="assets/images/logo.png" alt="vegetables logo" />
       <p class="text-xl">FarmLink</p>
     </a>
     <a class="hover:text-[#333]" [routerLink]="['/']">Home</a>
-    <a class="hover:text-[#333] flex items-center">
+    <button (click)="toggleOpen()" class="hover:text-[#333] flex items-center">
       Categories
-      <span> <img class="size-5" src="assets/icons/chevron-down.svg" alt="chevron down" /> </span
-    ></a>
+      <span> <img class="size-5" src="assets/icons/chevron-down.svg" alt="chevron down" /> </span>
+    </button>
     <a class="hover:text-[#333]" [routerLink]="['/products']">All products</a>
   </div>
   <div class="flex items-center gap-6">
-		<searchbar />
+    <searchbar />
     <img class="size-5 cursor-pointer" src="assets/icons/user.svg" alt="user icon" />
     <img
       class="size-5 cursor-pointer"

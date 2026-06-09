@@ -5,6 +5,10 @@
   font-family: "Poppins", sans-serif;
 }
 
+html {
+	overflow-x: hidden;
+}
+
 a, button {
 	cursor: pointer;
 }

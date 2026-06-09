@@ -18,7 +18,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
         response.getWriter().write("""
         {
-            "error": "Unauthorized"
+            "message": "Unauthorized"
         }
         """);
     }

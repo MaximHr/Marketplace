@@ -20,8 +20,8 @@ export class ProductIsle implements OnInit {
   title = input.required<string>();
 
   products = signal<ProductCardT[]>([]);
+	
   isLoading = signal(true);
-  err = signal<string | null>(null);
 
   ngOnInit() {
     this.service

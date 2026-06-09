@@ -5,6 +5,7 @@ import com.fmi.springcourse.marketplace.dto.StringResponse;
 import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
 import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
 import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
+import com.fmi.springcourse.marketplace.product.dto.ProductTypeDto;
 import com.fmi.springcourse.marketplace.product.service.ProductService;
 import com.fmi.springcourse.marketplace.user.entity.User;
 import jakarta.validation.Valid;
@@ -21,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -28,6 +31,23 @@ public class ProductController {
 	
 	public ProductController(ProductService service) {
 		this.service = service;
+	}
+	
+	@GetMapping
+	public ResponseEntity<PageResponse<ProductCardDto>> listProducts(Pageable pageable) {
+		return ResponseEntity.ok(service.listProducts(pageable));
+	}
+	
+	@GetMapping("/categories")
+	public ResponseEntity<List<ProductTypeDto>> listCategories() {
+		return ResponseEntity.ok(service.listCategories());
+	}
+	
+	@GetMapping("/{slug}")
+	public ResponseEntity<ProductDetails> getProductBySlug(@PathVariable String slug) {
+		ProductDetails product = service.getProductDetailsBySlug(slug);
+		
+		return ResponseEntity.ok(product);
 	}
 	
 	@PostMapping
@@ -38,18 +58,6 @@ public class ProductController {
 		return ResponseEntity
 			.status(HttpStatus.CREATED)
 			.body(uploadedProduct);
-	}
-	
-	@GetMapping("/{slug}")
-	public ResponseEntity<ProductDetails> getProductBySlug(@PathVariable String slug) {
-		ProductDetails product = service.getProductDetailsBySlug(slug);
-		
-		return ResponseEntity.ok(product);
-	}
-	
-	@GetMapping
-	public ResponseEntity<PageResponse<ProductCardDto>> listProducts(Pageable pageable) {
-		return ResponseEntity.ok(service.listProducts(pageable));
 	}
 	
 	@PutMapping("/{id}")
@@ -64,7 +72,8 @@ public class ProductController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<StringResponse> deleteProduct(@AuthenticationPrincipal User user, @PathVariable Long id) {
+	public ResponseEntity<StringResponse> deleteProduct(@AuthenticationPrincipal User user,
+	                                                    @PathVariable Long id) {
 		service.deleteProduct(id, user);
 		
 		return ResponseEntity.ok(new StringResponse("Product deleted successfully"));
