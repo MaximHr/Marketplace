@@ -25,6 +25,18 @@
       class="size-5 cursor-pointer"
       src="assets/icons/shopping-cart.svg"
       alt="shopping cart icon"
+      (click)="toggleCart()"
     />
+    @if (isCartOpen()) {
+      <div class="fixed inset-0 bg-black/40 z-30" (click)="toggleCart()"></div>
+    }
+
+    <div
+      class="fixed top-0 right-0 h-full z-40 transition-transform duration-300 ease-out"
+      style="transition: transform 300ms ease-out;"
+      [style.transform]="isCartOpen() ? 'translateX(0)' : 'translateX(100%)'"
+    >
+      <cart [close]="() => toggleCart()" />
+    </div>
   </div>
 </div>

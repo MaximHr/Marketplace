@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { Searchbar } from './searchbar/searchbar';
 import { RouterLink } from '@angular/router';
 import { DropDown } from './dropdown/dropdown';
+import { Cart } from './cart/cart';
 import { Categroy } from '../../types/category';
 import { ProductService } from '../../services/product-service';
 import { handleError } from '../../services/errorHandler';
@@ -10,7 +11,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-navbar',
   templateUrl: 'navbar.html',
-  imports: [Searchbar, RouterLink, DropDown],
+  imports: [Searchbar, RouterLink, DropDown, Cart],
 })
 export class Navbar implements OnInit {
   private service = inject(ProductService);
@@ -20,6 +21,8 @@ export class Navbar implements OnInit {
   categories = signal<Categroy[]>([]);
 
   isDropDownOpen = signal<boolean>(false);
+
+  isCartOpen = signal<boolean>(false);
 
   ngOnInit() {
     this.service
@@ -34,5 +37,9 @@ export class Navbar implements OnInit {
 
   toggleOpen() {
     this.isDropDownOpen.update((curr) => !curr);
+  }
+
+  toggleCart() {
+    this.isCartOpen.update((curr) => !curr);
   }
 }
