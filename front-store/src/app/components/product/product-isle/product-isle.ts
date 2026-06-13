@@ -3,7 +3,6 @@ import type { ProductCardT } from '../../../types/product-card';
 import { ProductCard } from '../product-card/product-card';
 import { ProductService } from '../../../services/product-service';
 import { handleError } from '../../../services/errorHandler';
-import { finalize } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { RouterLink } from '@angular/router';
 
@@ -25,8 +24,6 @@ export class ProductIsle implements OnInit {
 
   products = signal<ProductCardT[]>([]);
 
-  isLoading = signal(true);
-
   screenWidth = signal<number>(window.innerWidth);
 
   ngOnInit() {
@@ -35,7 +32,6 @@ export class ProductIsle implements OnInit {
         page: 0,
         size: 5,
       })
-      .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: (products) => {
           this.products.set(products.content);

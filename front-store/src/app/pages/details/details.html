@@ -1,3 +1,93 @@
-<div>
-	
+@let p = product();
+
+<div class="mt-6 px-12 mb-14">
+  @if (p) {
+    <div class="flex gap-4 items-start">
+      <div class="flex flex-col gap-3">
+        <button
+          (click)="selectedImage.set(p.mainImage)"
+          [class]="`${selectedImage() !== p.mainImage ? 'border-transparent' : 'border-[#444]'} bg-soft rounded-xl overflow-hidden border w-25 h-25 '`"
+        >
+          <img
+            [src]="imageUrl(p.mainImage)"
+            [alt]="p.name"
+            class="w-full object-cover transition-transform duration-200"
+          />
+        </button>
+
+        @for (img of p.additionalImages; track img.name) {
+          <button
+            (click)="selectedImage.set(img.name)"
+            [class]="`${selectedImage() === p.mainImage ? 'border-transparent' : 'border-[#444]'} bg-soft rounded-xl overflow-hidden border w-25 h-25'`"
+          >
+            <img [src]="imageUrl(img.name)" [alt]="p.name" class="w-full object-cover" />
+          </button>
+        }
+      </div>
+      <div class="rounded-3xl overflow-hidden bg-soft w-[40vw] mr-6">
+        <img [src]="imageUrl(selectedImage())" [alt]="p.name" class="w-full h-full object-cover" />
+      </div>
+      <div class="flex flex-col pt-2">
+        <span
+          class="self-start px-4 py-1.5 rounded-full bg-secondary text-xs font-semibold uppercase"
+        >
+          {{ p.type.title }}
+        </span>
+
+        <h1 class="text-5xl font-semibold mt-2.5 mb-5 w-lg">
+          {{ p.name }}
+        </h1>
+
+        <p class="text-3xl font-semibold">${{ p.price }}</p>
+
+        <p class="mt-6 text-[#000000B3] w-lg">{{ p.description }}</p>
+
+        <div class="pt-4 flex flex-col gap-4">
+          @if (p.quantity > 0) {
+            <span class="inline-flex items-center gap-2 font-medium text-emerald-600">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+              In stock ({{ p.quantity }} available)
+            </span>
+          } @else {
+            <span class="inline-flex items-center gap-2 text-sm font-medium text-red-600">
+              <span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span>
+              Out of stock
+            </span>
+          }
+          <div class="flex items-center gap-4">
+            <div
+              class="flex items-center rounded-full shadow-xs border border-soft overflow-hidden"
+            >
+              <button
+                (click)="decrement()"
+                class="w-11 h-11 flex items-center justify-center text-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+                [disabled]="qty() <= 1"
+              >
+                −
+              </button>
+              <span class="w-10 text-center font-semibold select-none">
+                {{ qty() }}
+              </span>
+              <button
+                (click)="increment(p.quantity)"
+                class="w-11 h-11 flex items-center justify-center text-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+                [disabled]="qty() >= p.quantity"
+              >
+                +
+              </button>
+            </div>
+            <button
+              [disabled]="p.quantity <= 0"
+              (click)="addToCart(p)"
+              class="flex-1 py-2.5 rounded-full bg-accent font-semibold hover:brightness-95"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <loading-details />
+  }
 </div>

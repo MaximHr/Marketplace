@@ -4,7 +4,8 @@ import { environment } from '../environment';
 import type { ProductCardT } from '../types/product-card';
 import { PageResponse } from '../types/page-response';
 import { Categroy } from '../types/category';
-import { PageableRequest } from '../types/pageable';
+import type { PageableRequest } from '../types/pageable';
+import type { ProductDetails } from '../types/product-details';
 
 @Service()
 export class ProductService {
@@ -19,8 +20,12 @@ export class ProductService {
     }
 
     return this.http.get<PageResponse<ProductCardT>>(this.path, {
-			params
-		});
+      params,
+    });
+  };
+
+  getDetails = (slug: string) => {
+    return this.http.get<ProductDetails>(this.path + `/${slug}`);
   };
 
   listCategories = () => {

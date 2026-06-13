@@ -17,7 +17,7 @@ a, button {
   --color-primary: #20652f;
   --color-accent: #efee5e;
   --color-secondary: #def0f2;
-	--color-soft: #eee;
+	--color-soft: #f2f2f2;
 }
 
 @keyframes floatAnimation {
