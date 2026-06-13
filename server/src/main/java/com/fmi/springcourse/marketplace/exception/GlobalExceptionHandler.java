@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<ExceptionResponse> handleEntityNotFoundException(IllegalArgumentException ex) {
+	public ResponseEntity<ExceptionResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
 		return ResponseEntity.badRequest()
 			.body(new ExceptionResponse(ex.getMessage()));
 	}

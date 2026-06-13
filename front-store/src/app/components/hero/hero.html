@@ -1,0 +1,60 @@
+<div class="w-full flex items-start justify-between mt-6 mb-14">
+  <div>
+    <h1 class="text-6xl my-10">
+      Local Sellers. <br />
+      <span class="relative font-medium"
+        ><img
+          loading="eager"
+          class="absolute h-4 bottom-0"
+          src="/assets/icons/underline.svg"
+          alt="underline"
+        />Fresh</span
+      >
+      Food.
+    </h1>
+    <ul class="flex flex-col font-medium gap-4 mb-6">
+      <li class="flex items-center gap-2">
+        <span class="rounded-full p-1 bg-soft"
+          ><img class="size-5" src="assets/icons/check.svg" alt="check" /></span
+        ><span class="show opacity-0">Straight from local producers</span>
+      </li>
+      <li class="flex items-center gap-2">
+        <span class="rounded-full p-1 bg-soft"
+          ><img class="size-5" src="assets/icons/check.svg" alt="check" /></span
+        ><span class="show opacity-0" style="animation-delay: 0.5s;">Naturally fresh and seasonal</span>
+      </li>
+      <li class="flex items-center gap-2">
+        <span class="rounded-full p-1 bg-soft"
+          ><img class="size-5" src="assets/icons/check.svg" alt="check" /></span
+        ><span class="show  opacity-0" style="animation-delay: 1s;">Better for people and planet</span>
+      </li>
+    </ul>
+    <div class="flex items-center gap-6">
+      <a [routerLink]="['/products']"
+        class="hover:bg-[#333] transition-colors gap-3 flex items-center font-medium bg-black text-white rounded-full px-6 py-3"
+      >
+        Shop Orgnaic Food
+        <span class="flex items-center justify-center bg-white rounded-full size-7">
+          <img class="size-5" src="assets/icons/chevron-right.svg" alt="chevron right" />
+        </span>
+      </a>
+      <button class="underline font-medium">Become a seller</button>
+    </div>
+  </div>
+  <div class="relative h-100 w-[50%]">
+    <img class="object-cover bg-soft rounded-2xl w-full h-full" src="assets/images/organic-shop.jpg" alt="Organic Shop" />
+    <p class="float font-medium bg-accent px-8 py-3 rounded-full absolute left-[50%] bottom-4">
+      Healthy
+    </p>
+    <p
+      class="float font-medium bg-primary text-white px-7 py-3 rounded-full absolute top-[30%] -left-15"
+    >
+      Eco-Friendly
+    </p>
+    <p
+      class="float font-medium bg-secondary size-18 flex justify-center items-center rounded-full absolute top-[10%] -right-5"
+    >
+      Tasty
+    </p>
+  </div>
+</div>

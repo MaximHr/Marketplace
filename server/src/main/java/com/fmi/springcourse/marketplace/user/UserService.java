@@ -7,13 +7,10 @@ import com.fmi.springcourse.marketplace.user.dto.UserUpdateRequestDTO;
 import com.fmi.springcourse.marketplace.user.entity.User;
 import com.fmi.springcourse.marketplace.util.JwtService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
