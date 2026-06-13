@@ -8,7 +8,9 @@
   </div>
   <div class="mt-6 flex gap-7 min-h-68">
     @for (product of products(); track product.slug) {
-      <product-card [product]="product" />
+      @if ($index != 4 || ($index == 4 && screenWidth() > 1475)) {
+        <product-card [product]="product" />
+      }
     }
   </div>
 </div>
