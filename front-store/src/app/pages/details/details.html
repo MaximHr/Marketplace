@@ -40,7 +40,7 @@
 
         <p class="text-3xl font-semibold">${{ p.price }}</p>
 
-        <p class="mt-6 text-[#000000B3] w-lg">{{ p.description }}</p>
+        <p class="mt-4 text-[#000000B3] w-lg">{{ p.description }}</p>
 
         <div class="pt-4 flex flex-col gap-4">
           @if (p.quantity > 0) {
@@ -48,42 +48,42 @@
               <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
               In stock ({{ p.quantity }} available)
             </span>
+            <div class="flex items-center gap-4">
+              <div
+                class="flex items-center rounded-full shadow-xs border border-soft overflow-hidden"
+              >
+                <button
+                  (click)="decrement()"
+                  class="w-11 h-11 flex items-center justify-center text-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+                  [disabled]="qty() <= 1"
+                >
+                  −
+                </button>
+                <span class="w-10 text-center font-semibold select-none">
+                  {{ qty() }}
+                </span>
+                <button
+                  (click)="increment(p.quantity)"
+                  class="w-11 h-11 flex items-center justify-center text-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed"
+                  [disabled]="qty() >= p.quantity"
+                >
+                  +
+                </button>
+              </div>
+              <button
+                [disabled]="p.quantity <= 0"
+                (click)="addToCart(p)"
+                class="flex-1 py-2.5 rounded-full bg-accent font-semibold hover:brightness-95"
+              >
+                Add to Cart
+              </button>
+            </div>
           } @else {
             <span class="inline-flex items-center gap-2 text-sm font-medium text-red-600">
               <span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span>
               Out of stock
             </span>
           }
-          <div class="flex items-center gap-4">
-            <div
-              class="flex items-center rounded-full shadow-xs border border-soft overflow-hidden"
-            >
-              <button
-                (click)="decrement()"
-                class="w-11 h-11 flex items-center justify-center text-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed"
-                [disabled]="qty() <= 1"
-              >
-                −
-              </button>
-              <span class="w-10 text-center font-semibold select-none">
-                {{ qty() }}
-              </span>
-              <button
-                (click)="increment(p.quantity)"
-                class="w-11 h-11 flex items-center justify-center text-lg font-medium disabled:opacity-40 disabled:cursor-not-allowed"
-                [disabled]="qty() >= p.quantity"
-              >
-                +
-              </button>
-            </div>
-            <button
-              [disabled]="p.quantity <= 0"
-              (click)="addToCart(p)"
-              class="flex-1 py-2.5 rounded-full bg-accent font-semibold hover:brightness-95"
-            >
-              Add to Cart
-            </button>
-          </div>
         </div>
       </div>
     </div>
