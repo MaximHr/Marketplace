@@ -5,7 +5,6 @@ import com.fmi.springcourse.marketplace.auth.dto.LoginRequest;
 import com.fmi.springcourse.marketplace.auth.dto.RegistrationRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

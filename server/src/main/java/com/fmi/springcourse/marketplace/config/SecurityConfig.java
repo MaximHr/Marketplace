@@ -30,14 +30,13 @@ public class SecurityConfig {
 	private String storeUrl;
 	
 	@Bean
-	SecurityFilterChain configure(HttpSecurity http) throws Exception {
+	SecurityFilterChain configure(HttpSecurity http) {
 		http
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement(session ->
 				session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			)
-			
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/auth/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
@@ -45,7 +44,6 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/products/**").permitAll()
 				.anyRequest().authenticated()
 			)
-			
 			.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 		
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
