@@ -99,6 +99,7 @@ public class ImageServiceImpl implements ImageService {
 				.add(new Image(name, product));
 			
 			productRepository.save(product);
+			
 		}
 		
 		return List.of(new ImageDto(name));

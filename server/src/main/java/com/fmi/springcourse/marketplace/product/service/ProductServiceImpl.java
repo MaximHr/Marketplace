@@ -12,6 +12,11 @@ import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
 import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
 import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
 import com.fmi.springcourse.marketplace.image.repo.S3ImageRepository;
+<<<<<<< Updated upstream
+=======
+import com.fmi.springcourse.marketplace.product.entity.ProductType;
+import com.fmi.springcourse.marketplace.user.UserRepository;
+>>>>>>> Stashed changes
 import com.fmi.springcourse.marketplace.user.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +25,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,12 +34,14 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductRepository productRepository;
 	private final S3ImageRepository imageRepository;
 	private final DbImageRepository dbImageRepository;
+	private final UserRepository userRepository;
 	
 	public ProductServiceImpl(ProductRepository productRepository, S3ImageRepository imageRepository,
-	                          DbImageRepository dbImageRepository) {
+	                          DbImageRepository dbImageRepository, UserRepository userRepository) {
 		this.productRepository = productRepository;
 		this.imageRepository = imageRepository;
 		this.dbImageRepository = dbImageRepository;
+		this.userRepository = userRepository;
 	}
 	
 	@Transactional
@@ -89,12 +95,38 @@ public class ProductServiceImpl implements ProductService {
 		
 		Page<Product> page = productRepository.findAll(pageable);
 		
+		return convertToPageResponse(page);
+	}
+	
+	private PageResponse<ProductCardDto> convertToPageResponse(Page<Product> page) {
 		List<ProductCardDto> products = page.get()
 			.map(ProductCardDto::new)
-			.collect(Collectors.toList());
+			.toList();
 		
 		return new PageResponse<>(products, page.getTotalElements(),
 			page.getTotalPages());
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public PageResponse<ProductCardDto> getProductsByUserId(String profileName, Pageable pageable) {
+		validatePageable(pageable);
+		
+		var user = userRepository.findByProfileName(profileName)
+			.orElseThrow(() -> new EntityNotFoundException("No user with this profile name was found"));
+		
+		Page<Product> page = productRepository.findByUser(user, pageable);
+		
+		return convertToPageResponse(page);
+	}
+	
+	@Override
+	public PageResponse<ProductCardDto> getProductsByType(ProductType type, Pageable pageable) {
+		validatePageable(pageable);
+		
+		Page<Product> page = productRepository.findByType(pageable, type);
+		
+		return convertToPageResponse(page);
 	}
 	
 	@Transactional

@@ -5,6 +5,11 @@ import com.fmi.springcourse.marketplace.dto.StringResponse;
 import com.fmi.springcourse.marketplace.product.dto.ProductCardDto;
 import com.fmi.springcourse.marketplace.product.dto.ProductDetails;
 import com.fmi.springcourse.marketplace.product.dto.ProductRequest;
+<<<<<<< Updated upstream
+=======
+import com.fmi.springcourse.marketplace.product.dto.ProductTypeDto;
+import com.fmi.springcourse.marketplace.product.entity.ProductType;
+>>>>>>> Stashed changes
 import com.fmi.springcourse.marketplace.product.service.ProductService;
 import com.fmi.springcourse.marketplace.user.entity.User;
 import jakarta.validation.Valid;
@@ -30,6 +35,42 @@ public class ProductController {
 		this.service = service;
 	}
 	
+<<<<<<< Updated upstream
+=======
+	@GetMapping
+	public ResponseEntity<PageResponse<ProductCardDto>> listProducts(Pageable pageable) {
+		return ResponseEntity.ok(service.listProducts(pageable));
+	}
+	
+	@GetMapping("/categories")
+	public ResponseEntity<List<ProductTypeDto>> listCategories() {
+		return ResponseEntity.ok(service.listCategories());
+	}
+	
+	@GetMapping("/{slug}")
+	public ResponseEntity<ProductDetails> getProductBySlug(@PathVariable String slug) {
+		ProductDetails product = service.getProductDetailsBySlug(slug);
+		
+		return ResponseEntity.ok(product);
+	}
+	
+	@GetMapping("/user/{profileName}")
+	public ResponseEntity<PageResponse<ProductCardDto>> getProductsByUser(@PathVariable String profileName,
+	                                                                      Pageable pageable) {
+		return ResponseEntity.ok(
+			service.getProductsByUserId(profileName, pageable)
+		);
+	}
+	
+	@GetMapping("/type/{type}")
+	public ResponseEntity<PageResponse<ProductCardDto>> getProductsByType(@PathVariable ProductType type,
+	                                                                      Pageable pageable) {
+		return ResponseEntity.ok(
+			service.getProductsByType(type, pageable)
+		);
+	}
+	
+>>>>>>> Stashed changes
 	@PostMapping
 	public ResponseEntity<ProductDetails> createProduct(@AuthenticationPrincipal User user,
 	                                                    @Valid @RequestBody ProductRequest product) {
