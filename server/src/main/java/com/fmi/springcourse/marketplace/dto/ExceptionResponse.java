@@ -1,4 +1,4 @@
 package com.fmi.springcourse.marketplace.dto;
 
-public record ExceptionResponse(String error) {
+public record ExceptionResponse(String message) {
 }

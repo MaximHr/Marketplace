@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+@import 'ngx-toastr/toastr';
+
+* {
+  font-family: "Poppins", sans-serif;
+}
+
+html {
+	overflow-x: hidden;
+}
+
+a, button {
+	cursor: pointer;
+}
+
+@theme {
+  --color-primary: #20652f;
+  --color-accent: #efee5e;
+  --color-secondary: #def0f2;
+	--color-soft: #f2f2f2;
+}
+
+@keyframes floatAnimation {
+	0% {
+		transform: translateY(0);
+	}
+
+	50% {
+		transform: translateY(40px);
+	}
+
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes showAnimation {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+.show {
+	animation: showAnimation 1s ease forwards;
+}
+
+.float {
+	animation: floatAnimation 5s ease-in-out forwards infinite;
+}
+
+.float:nth-of-type(3) {
+	animation-delay: -2.5s;
+}
+
+.ngx-toastr {
+	box-shadow: none !important;
+	background-color: #e64d3d !important;
+}

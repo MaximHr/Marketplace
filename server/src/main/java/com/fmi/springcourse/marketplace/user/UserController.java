@@ -39,7 +39,8 @@ public class UserController {
     }
 
     @PatchMapping("/update")
-    public UserResponseDTO updateUser(@AuthenticationPrincipal User user, @Valid @RequestBody UserUpdateRequestDTO request) {
+    public UserResponseDTO updateUser(@AuthenticationPrincipal User user,
+                                      @Valid @RequestBody UserUpdateRequestDTO request) {
         return userService.updateUser(user.getEmail(), request);
     }
 

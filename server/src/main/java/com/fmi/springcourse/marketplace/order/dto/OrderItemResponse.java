@@ -1,6 +1,5 @@
 package com.fmi.springcourse.marketplace.order.dto;
 
-import com.fmi.springcourse.marketplace.cart.entity.CartItem;
 import com.fmi.springcourse.marketplace.order.entity.OrderItem;
 
 import java.math.BigDecimal;

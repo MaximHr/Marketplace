@@ -1,0 +1,14 @@
+<div>
+  <div
+    class="fixed top-20 bg-black opacity-25 w-screen h-screen z-10 left-0"
+    (click)="close()"
+  ></div>
+  <div
+	style="grid-template-columns: repeat(4, max-content);"
+    class="grid text-[1rem] -left-12 font-medium absolute z-20 bg-white w-screen pt-3 pb-5 px-12 top-9 border-t border-[#d2d2d2]"
+  >
+    @for (category of categories(); track $index) {
+      <a class=" hover:text-[#333] cursor-pointer mt-2 mr-14">{{ category.title }}</a>
+    }
+  </div>
+</div>
