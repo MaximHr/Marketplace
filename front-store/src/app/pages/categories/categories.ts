@@ -1,4 +1,8 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/operators';
+
 import { ProductCard } from '../../components/product/product-card/product-card';
 import { ProductService } from '../../services/product-service';
 import { ToastrService } from 'ngx-toastr';
@@ -10,24 +14,42 @@ import { form, FormField } from '@angular/forms/signals';
 import { environment } from '../../environment';
 
 @Component({
-  selector: 'products-page',
+  selector: 'categories-page',
   templateUrl: '../../components/product/products-grid.html',
   imports: [ProductCard, PaginationController, FormField],
 })
-export class ProductsPage {
-  private sortText = signal<'createdAt,desc' | 'price,desc' | 'price,asc'>('createdAt,desc');
+export class CategoriesPage {
+  private sortText = signal<'createdAt,desc' | 'price,desc' | 'price,asc'>(
+    'createdAt,desc'
+  );
+
+  // read-only signal derived from route
+  private categoryCode;
 
   constructor(
     private toastr: ToastrService,
     private service: ProductService,
+    private route: ActivatedRoute,
   ) {
+    this.categoryCode = toSignal(
+      this.route.paramMap.pipe(
+        map(params => params.get('code'))
+      ),
+      { initialValue: null }
+    );
+
     effect((onCleanup) => {
       const params = {
         ...this.pageInfo(),
-        sort: this.sortText(),
+        sort: this.sortText()
       };
+			const code = this.categoryCode();
 
-      const sub = this.service.listProducts(params).subscribe({
+			if (!code) {
+				return;
+			}
+
+      const sub = this.service.listProductsByCategory(params, code).subscribe({
         next: (products) => {
           this.products.set(products.content);
           this.totalElements.set(products.totalElements);
@@ -41,12 +63,10 @@ export class ProductsPage {
   }
 
   products = signal<ProductCardT[]>([]);
-
   totalElements = signal<number>(0);
-
   totalPages = signal<number>(0);
 
-  title = signal<string>('All products');
+  title = computed<string>(() => this.categoryCode() || "")
 
   selectForm = form(this.sortText);
 

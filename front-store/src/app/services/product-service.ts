@@ -24,6 +24,18 @@ export class ProductService {
     });
   };
 
+  listProductsByCategory = (pageable: PageableRequest, code: string) => {
+		let params = new HttpParams().set('page', pageable.page).set('size', pageable.size);
+
+    if (pageable.sort) {
+      params = params.set('sort', pageable.sort);
+    }
+
+    return this.http.get<PageResponse<ProductCardT>>(this.path + `/type/${code}`, {
+      params,
+    });
+  };
+
   getDetails = (slug: string) => {
     return this.http.get<ProductDetails>(this.path + `/${slug}`);
   };

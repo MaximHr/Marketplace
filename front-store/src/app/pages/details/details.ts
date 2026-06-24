@@ -1,5 +1,5 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ProductService } from '../../services/product-service';
 import type { ProductDetails } from '../../types/product-details';
 import { handleError } from '../../services/errorHandler';
@@ -10,7 +10,7 @@ import { LoadingDetails } from "./loading-details/loading-details";
 @Component({
   selector: 'details-page',
   templateUrl: 'details.html',
-  imports: [LoadingDetails],
+  imports: [LoadingDetails, RouterLink],
 })
 export class Details implements OnInit {
   private service = inject(ProductService);
