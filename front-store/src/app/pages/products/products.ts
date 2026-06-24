@@ -1,27 +1,32 @@
-import { Component, effect, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, effect, signal } from '@angular/core';
 import { ProductCard } from '../../components/product/product-card/product-card';
 import { ProductService } from '../../services/product-service';
 import { ToastrService } from 'ngx-toastr';
 import type { ProductCardT } from '../../types/product-card';
 import { PageableRequest } from '../../types/pageable';
 import { handleError } from '../../services/errorHandler';
-import { PaginationController } from "../../components/pagination-controller/pagination-controller";
+import { PaginationController } from '../../components/pagination-controller/pagination-controller';
+import { form, FormField } from '@angular/forms/signals';
 
 @Component({
   selector: 'products-page',
   templateUrl: 'products.html',
-  imports: [CommonModule, ProductCard, PaginationController]
+  imports: [ProductCard, PaginationController, FormField],
 })
 export class ProductsPage {
   private readonly pageSize = 2;
+
+  private sortText = signal<'createdAt,desc' | 'price,desc' | 'price,asc'>('createdAt,desc');
 
   constructor(
     private toastr: ToastrService,
     private service: ProductService,
   ) {
     effect((onCleanup) => {
-      const params = this.pageInfo();
+      const params = {
+        ...this.pageInfo(),
+        sort: this.sortText(),
+      };
 
       const sub = this.service.listProducts(params).subscribe({
         next: (products) => {
@@ -43,6 +48,8 @@ export class ProductsPage {
   totalPages = signal<number>(0);
 
   title = signal<string>('All products');
+
+  selectForm = form(this.sortText);
 
   pageInfo = signal<PageableRequest>({
     page: 0,

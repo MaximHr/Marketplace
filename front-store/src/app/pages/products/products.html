@@ -1,7 +1,15 @@
-<div class="px-12 mt-10 min-h-[75vh] flex flex-col">
-  <h1 class="text-4xl font-semibold">{{ title().concat(`(${totalElements()})`) }}</h1>
+<div class="px-12 mt-10 flex flex-col">
+  <div class="flex items-center justify-between gap-8">
+    <h1 class="text-4xl font-semibold">{{ title().concat(`(${totalElements()})`) }}</h1>
+		
+		<select [formField]="selectForm" class="outline-0 shadow-2xs hover:bg-[#fcfcfc] rounded-lg py-1.5 px-4 text-center cursor-pointer border-[#ccc] border">
+			<option value="createdAt,desc">Realease date</option>
+			<option value="price,desc">Price (desc.)</option>
+			<option value="price,asc">Price (asc.)</option>
+		</select>		
+	</div>
 
-  <div class="mt-6">
+  <div class="mt-8 min-h-75">
     <div class="grid gap-6 grid-cols-[repeat(auto-fit,265px)]">
       @for (p of products(); track p.slug) {
         <product-card [product]="p" />
