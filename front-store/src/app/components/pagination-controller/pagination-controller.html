@@ -1,0 +1,5 @@
+<div class="flex items-center gap-4">
+	<button class="text-xl shadow-2xs hover:bg-[#fcfcfc] rounded-xl py-0.75 px-5 border-[#ccc] border" (click)="prev()" [disabled]="pageInfo()().page <= 0">&lt;</button>
+	<p>Page {{pageInfo()().page + 1}} of {{totalPages()}}</p>
+	<button class="text-xl shadow-2xs hover:bg-[#fcfcfc] rounded-xl py-0.75 px-5 border-[#ccc] border" (click)="next()" [disabled]="pageInfo()().page >= (totalPages() - 1)">&gt;</button>
+</div>

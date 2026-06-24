@@ -1,3 +1,12 @@
-<div>
-	<h1>Products</h1>
+<div class="px-12 mt-10 min-h-[75vh] flex flex-col">
+  <h1 class="text-4xl font-semibold">{{ title().concat(`(${totalElements()})`) }}</h1>
+
+  <div class="mt-6">
+    <div class="grid gap-6 grid-cols-[repeat(auto-fit,265px)]">
+      @for (p of products(); track p.slug) {
+        <product-card [product]="p" />
+      }
+    </div>
+  </div>
+  <pagination-controller class="self-end" [totalPages]="totalPages()" [pageInfo]="pageInfo" />
 </div>
