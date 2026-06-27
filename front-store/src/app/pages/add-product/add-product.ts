@@ -8,6 +8,7 @@ import { ProductService } from '../../services/product-service';
 import type { Categroy } from '../../types/category';
 import { ProductRequest } from '../../types/product-request';
 import { ImageService } from '../../services/imageService';
+import { environment } from '../../environment';
 
 type ProductFormModel = Omit<ProductRequest, 'type'> & { typeCode: string };
 
@@ -80,6 +81,7 @@ export class AddProduct implements OnInit {
       const type = this.categories().find((c) => c.code === value.typeCode);
 
       if (!type) {
+        this.toastr.error('Please add a valid category');
         return;
       }
 
@@ -100,5 +102,9 @@ export class AddProduct implements OnInit {
         handleError(err, this.toastr);
       }
     });
+  }
+
+  imageUrl(path: string) {
+    return environment.imageStorage + path;
   }
 }

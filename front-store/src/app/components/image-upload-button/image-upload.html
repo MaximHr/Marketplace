@@ -3,7 +3,7 @@
     <div
       class="relative w-full h-38 rounded-xl overflow-hidden border border-[#d9d3c2] flex items-center justify-center px-4"
     >
-      <span class="text-sm font-medium truncate">{{ value().name }}</span>
+      <img class="h-38" [src]="imageUrl(value().name)" alt="product main image" />
       <button
         type="button"
         (click)="clear($event)"

@@ -23,13 +23,13 @@
       </div>
 
       <div class="mb-5" data-field="type">
-        <label for="type" class="block text-[13px] font-semibold mb-1.5">Type </label>
+        <label for="type" class="block text-[13px] font-semibold mb-1.5">Category </label>
         <select
           id="type"
           [formField]="productForm.typeCode"
           class="w-full text-[15px] px-3.5 py-2.5 border border-[#d9d3c2] rounded-lg bg-white focus:outline-none focus:ring-2"
         >
-          <option value="" disabled>Select a type…</option>
+          <option value="" disabled>Select a category</option>
           @for (category of categories(); track category.code) {
             <option [value]="category.code">{{ category.title }}</option>
           }
@@ -87,19 +87,19 @@
         @if (productModel().additionalImage.length) {
           <div class="flex flex-wrap gap-2 mt-3">
             @for (image of productModel().additionalImage; track $index) {
-              <span
-                class="flex items-center gap-2 text-[13px] bg-[#f3f1e7] border border-[#d9d3c2] rounded-full pl-3 pr-1.5 py-1"
+              <div
+                class="relative flex items-center gap-2 text-[13px] bg-[#f3f1e7] border border-[#d9d3c2] pl-3 pr-1.5 py-1"
               >
-                {{ image.name }}
+                <img class="h-38 object-contain" [src]="imageUrl(image.name)" alt="addition image" />
                 <button
                   type="button"
                   (click)="removeAdditionalImage($index)"
-                  class="flex items-center justify-center bg-black text-white rounded-full size-5 hover:bg-[#333]"
+                  class="right-2 top-2 absolute flex items-center justify-center bg-black text-white rounded-full size-5 hover:bg-[#333]"
                   aria-label="Remove image"
                 >
                   &times;
                 </button>
-              </span>
+              </div>
             }
           </div>
         }

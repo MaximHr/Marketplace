@@ -2,7 +2,6 @@ package com.fmi.springcourse.marketplace.product.dto;
 
 import com.fmi.springcourse.marketplace.image.ImageDto;
 import com.fmi.springcourse.marketplace.product.entity.Product;
-import com.fmi.springcourse.marketplace.product.entity.ProductType;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -34,10 +33,10 @@ public class ProductRequest {
 	private Integer quantity;
 	
 	@NotNull
-	private ProductType type;
+	private ProductTypeDto type;
 	
-	@NotBlank(message = "Main image must be uploaded.")
-	private String mainImage;
+	@NotNull
+	private ImageDto mainImage;
 	
 	private List<ImageDto> additionalImages;
 	

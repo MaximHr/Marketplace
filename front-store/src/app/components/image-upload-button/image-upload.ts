@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { handleError } from '../../services/errorHandler';
 import type { Image } from '../../types/image';
 import { ImageService } from '../../services/imageService';
+import { environment } from '../../environment';
 
 let nextId = 0;
 
@@ -54,5 +55,9 @@ export class ImageUpload implements FormValueControl<Image> {
     });
 
     this.value.set({ name: '' });
+  }
+
+  imageUrl(path: string) {
+    return environment.imageStorage + path;
   }
 }

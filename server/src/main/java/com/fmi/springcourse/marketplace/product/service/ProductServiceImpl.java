@@ -51,11 +51,15 @@ public class ProductServiceImpl implements ProductService {
 		}
 		
 		List<Image> images = getAdditionalImages(req);
-		var product = new Product(req.getName(), req.getDescription(), req.getPrice(), req.getQuantity(),
-			req.getType(), req.getMainImage(), images, user);
+		ProductType type = ProductType.valueOf(req.getType().code());
 		
-		for (var img : images) {
-			img.setProduct(product);
+		var product = new Product(req.getName(), req.getDescription(), req.getPrice(), req.getQuantity(),
+			type, req.getMainImage().name(), images, user);
+		
+		if (images != null) {
+			for (var img : images) {
+				img.setProduct(product);
+			}
 		}
 		
 		Product savedProduct = productRepository.save(product);
@@ -162,7 +166,7 @@ public class ProductServiceImpl implements ProductService {
 		product.setName(req.getName());
 		product.setPrice(req.getPrice());
 		product.setQuantity(req.getQuantity());
-		product.setMainImage(req.getMainImage());
+		product.setMainImage(req.getMainImage().name());
 		
 		return new ProductDetails(productRepository.save(product));
 	}
