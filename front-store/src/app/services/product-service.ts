@@ -6,6 +6,7 @@ import { PageResponse } from '../types/page-response';
 import { Categroy } from '../types/category';
 import type { PageableRequest } from '../types/pageable';
 import type { ProductDetails } from '../types/product-details';
+import { ProductRequest } from '../types/product-request';
 
 @Service()
 export class ProductService {
@@ -25,7 +26,7 @@ export class ProductService {
   };
 
   listProductsByCategory = (pageable: PageableRequest, code: string) => {
-		let params = new HttpParams().set('page', pageable.page).set('size', pageable.size);
+    let params = new HttpParams().set('page', pageable.page).set('size', pageable.size);
 
     if (pageable.sort) {
       params = params.set('sort', pageable.sort);
@@ -42,5 +43,9 @@ export class ProductService {
 
   listCategories = () => {
     return this.http.get<Categroy[]>(this.path + '/categories');
+  };
+
+  createProduct = (product: ProductRequest) => {
+    return this.http.post<ProductDetails>(this.path, product);
   };
 }

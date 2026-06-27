@@ -3,6 +3,7 @@ import { Landing } from './pages/landing/landing';
 import { ProductsPage } from './pages/products/products';
 import { Details } from './pages/details/details';
 import { CategoriesPage } from './pages/categories/categories';
+import { AddProduct } from './pages/add-product/add-product';
 
 export const routes: Routes = [
 	{
@@ -20,5 +21,9 @@ export const routes: Routes = [
 	{
 		path: 'categories/:code',
 		component: CategoriesPage
+	},
+	{
+		path: 'add-product',
+		component: AddProduct
 	}
 ];
