@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { inject, Service } from '@angular/core';
 import { environment } from '../environment';
 import type { ProductCardT } from '../types/product-card';
@@ -12,6 +12,14 @@ import { ProductRequest } from '../types/product-request';
 export class ProductService {
   private http = inject(HttpClient);
   private path = environment.serverUrl + `/products`;
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('auth-token');
+
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+  }
 
   listProducts = (pageable: PageableRequest) => {
     let params = new HttpParams().set('page', pageable.page).set('size', pageable.size);
@@ -46,6 +54,8 @@ export class ProductService {
   };
 
   createProduct = (product: ProductRequest) => {
-    return this.http.post<ProductDetails>(this.path, product);
+    return this.http.post<ProductDetails>(this.path, product, {
+      headers: this.getAuthHeaders(),
+    });
   };
 }

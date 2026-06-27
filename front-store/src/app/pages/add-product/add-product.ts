@@ -37,6 +37,8 @@ export class AddProduct implements OnInit {
 
   readonly productForm = form(this.productModel);
 
+  token = signal<string | null>(localStorage.getItem('auth-token'));
+
   ngOnInit() {
     this.productService.listCategories().subscribe({
       next: (categories) => this.categories.set(categories),
@@ -84,6 +86,11 @@ export class AddProduct implements OnInit {
         this.toastr.error('Please add a valid category');
         return;
       }
+			
+			if (!value.mainImage.name) {
+        this.toastr.error('Please add a valid main image');
+        return;
+			}
 
       const productRequest: ProductRequest = {
         name: value.name,
@@ -98,6 +105,15 @@ export class AddProduct implements OnInit {
       try {
         await firstValueFrom(this.productService.createProduct(productRequest));
         this.toastr.success('Product uploaded successfully');
+        this.productModel.set({
+          name: '',
+          description: '',
+          price: 0,
+          quantity: 0,
+          typeCode: '',
+          mainImage: { name: '' },
+          additionalImage: [],
+        });
       } catch (err) {
         handleError(err, this.toastr);
       }

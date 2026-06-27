@@ -18,10 +18,14 @@ public record ProductDetails(Long id,
                              String mainImage,
                              List<ImageDto> additionalImages) {
 	public ProductDetails(Product product) {
-		var images = product.getAdditionalImages()
-			.stream()
-			.map(ImageDto::new)
-			.toList();
+		List<ImageDto> images = null;
+		
+		if (product.getAdditionalImages() != null) {
+			images = product.getAdditionalImages()
+				.stream()
+				.map(ImageDto::new)
+				.toList();
+		}
 		
 		this(product.getId(),
 			product.getSlug(),
@@ -29,7 +33,9 @@ public record ProductDetails(Long id,
 			product.getDescription(),
 			product.getPrice(),
 			product.getQuantity(),
-			new ProductTypeDto(product.getType()),
+			new
+				
+				ProductTypeDto(product.getType()),
 			product.getCreatedAt(),
 			product.getMainImage(),
 			images);

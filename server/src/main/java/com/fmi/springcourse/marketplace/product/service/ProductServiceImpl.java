@@ -60,10 +60,10 @@ public class ProductServiceImpl implements ProductService {
 			for (var img : images) {
 				img.setProduct(product);
 			}
+			dbImageRepository.saveAll(images);
 		}
 		
 		Product savedProduct = productRepository.save(product);
-		dbImageRepository.saveAll(images);
 		
 		return new ProductDetails(savedProduct);
 	}

@@ -4,14 +4,7 @@
       class="relative w-full h-38 rounded-xl overflow-hidden border border-[#d9d3c2] flex items-center justify-center px-4"
     >
       <img class="h-38" [src]="imageUrl(value().name)" alt="product main image" />
-      <button
-        type="button"
-        (click)="clear($event)"
-        class="absolute top-2 right-2 bg-black/70 text-white rounded-full size-7 flex items-center justify-center hover:bg-black"
-        aria-label="Remove image"
-      >
-        &times;
-      </button>
+  
     </div>
   } @else {
     <label
