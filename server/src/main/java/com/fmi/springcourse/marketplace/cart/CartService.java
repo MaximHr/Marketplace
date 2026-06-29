@@ -11,15 +11,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class CartService {
     private final CartRepository repo;
     private final ProductServiceImpl productService;
 
+    private Cart retrieveCart(User user, String guestToken) {
+        if (user != null) {
+            return repo.findByUser(user).orElse(new Cart(user));
+        } else {
+            return repo.findByGuestToken(guestToken)
+                    .orElse(new Cart(UUID.randomUUID().toString()));
+        }
+    }
+
     @Transactional
-    public CartResponse addProduct(Long productId, Integer quantity, User user) {
-        Cart cart = repo.findByUser(user).orElse(new Cart(user));
+    public CartResponse addProduct(Long productId, Integer quantity, User user, String guestToken) {
+        Cart cart = retrieveCart(user, guestToken);
+
         Product product = productService.getProductById(productId);
         cart.addItem(product, quantity);
         repo.save(cart);
@@ -28,24 +41,24 @@ public class CartService {
     }
 
     @Transactional
-    public CartResponse removeProduct(Long productId, User user) {
-        return repo.findByUser(user).map(cart -> {
-            Product product = productService.getProductById(productId);
-            cart.removeItem(product);
-            repo.save(cart);
-            return new CartResponse(cart);
-        }).orElseGet(() -> new CartResponse(new Cart(user))); // Return empty representation
+    public CartResponse removeProduct(Long productId, User user, String guestToken) {
+        Cart cart = retrieveCart(user, guestToken);
+
+        Product product = productService.getProductById(productId);
+        cart.removeItem(product);
+        repo.save(cart);
+        return new CartResponse(cart);
     }
 
     @Transactional
-    public CartResponse updateQuantity(Long productId, Integer requestedQuantity, User user) {
+    public CartResponse updateQuantity(Long productId, Integer requestedQuantity, User user, String guestToken) {
         Product product = productService.getProductById(productId);
         if (requestedQuantity > product.getQuantity()) {
             throw new OutOfStockException("Only " + product.getQuantity() + " items left in stock");
         }
 
-        Cart cart = repo.findByUser(user)
-                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
+        Cart cart = retrieveCart(user, guestToken);
+        if (cart.getCartItems().isEmpty()) return new CartResponse(cart);
 
         cart.updateQuantity(product, requestedQuantity);
         repo.save(cart);
@@ -58,6 +71,28 @@ public class CartService {
             cart.getCartItems().clear();
             repo.save(cart);
         });
+    }
+
+    @Transactional
+    public CartResponse getCart(User user) {
+        Cart cart = repo.findByUser(user).orElse(new Cart(user));
+        repo.save(cart);
+        return new CartResponse(cart);
+    }
+
+    @Transactional
+    public CartResponse getCartForGuest(String guestToken) {
+        Cart cart;
+
+        if (guestToken == null || guestToken.isEmpty()) {
+            cart = new Cart(UUID.randomUUID().toString());
+        } else {
+            cart = repo.findByGuestToken(guestToken)
+                    .orElse(new Cart(UUID.randomUUID().toString()));
+        }
+
+        repo.save(cart);
+        return new CartResponse(cart);
     }
 
     public Cart getCartByUser(User user) {

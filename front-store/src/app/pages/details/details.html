@@ -72,8 +72,8 @@
                 </button>
               </div>
               <button
-                [disabled]="p.quantity <= 0"
-                (click)="addToCart(p)"
+                [disabled]="p.quantity <= 0 || !product()"
+                (click)="addToCart()"
                 class="flex-1 py-2.5 rounded-full bg-accent font-semibold hover:brightness-95"
               >
                 Add to Cart

@@ -38,10 +38,12 @@ public class SecurityConfig {
 				session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			)
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/auth/**").permitAll()
+				.requestMatchers("/auth", "/auth/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
 				.requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+				.requestMatchers("/cart", "/cart/**").permitAll()
+				.requestMatchers("/api/stripe/**", "/api/stripe/webhook").permitAll()
 				.anyRequest().authenticated()
 			)
 			.exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));

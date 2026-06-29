@@ -25,7 +25,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 	
 	private final UserDetailsService userDetailsService;
 	private final JwtService jwtService;
-	
+
+	@Override
+	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+		String path = request.getRequestURI();
+		// Exclude Stripe Webhooks, If the request is for the stripe webhook, skip this filter entirely
+		return path.startsWith("/api/stripe/");
+	}
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
 	                                HttpServletResponse response,

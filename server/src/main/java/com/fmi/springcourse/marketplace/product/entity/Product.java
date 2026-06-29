@@ -24,6 +24,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,7 +74,7 @@ public class Product {
 	private ProductType type;
 	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-	private List<Image> additionalImages;
+	private List<Image> additionalImages = new ArrayList<>();
 	
 	@Getter
 	@ManyToOne(fetch = FetchType.LAZY)
