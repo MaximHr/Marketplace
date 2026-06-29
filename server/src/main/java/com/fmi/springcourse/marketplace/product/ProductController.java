@@ -59,6 +59,12 @@ public class ProductController {
 			service.getProductsByType(type, pageable)
 		);
 	}
+
+	@GetMapping("/id/{id}")
+	public ResponseEntity<ProductDetails> getProductById(@PathVariable Long id) {
+		ProductDetails product = service.getProductDetailsById(id);
+		return ResponseEntity.ok(product);
+	}
 	
 	@PostMapping
 	public ResponseEntity<ProductDetails> createProduct(@AuthenticationPrincipal User user,

@@ -20,13 +20,62 @@
   </div>
   <div class="flex items-center gap-6">
     <searchbar />
-    <img class="size-5 cursor-pointer" src="assets/icons/user.svg" alt="user icon" />
-    <img
-      class="size-5 cursor-pointer"
-      src="assets/icons/shopping-cart.svg"
-      alt="shopping cart icon"
-      (click)="toggleCart()"
-    />
+    <!-- USER BUTTON   -->
+    <div class="relative">
+      <img
+        class="size-5 cursor-pointer hover:opacity-80 transition-opacity"
+        src="assets/icons/user.svg"
+        alt="user icon"
+        (click)="toggleUserMenu()"
+      />
+
+      @if (isUserMenuOpen()) {
+      <div class="fixed inset-0 z-10" (click)="toggleUserMenu()"></div>
+
+      <div class="absolute right-0 mt-3 w-48 bg-white rounded-md shadow-lg border border-gray-100 py-2 z-20 animate-fade-in">
+        @if (isLoggedIn()) {
+        <a [routerLink]="['/profile']" (click)="toggleUserMenu()" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+          My Profile
+        </a>
+        <a [routerLink]="['/orders']" (click)="toggleUserMenu()" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
+          Order History
+        </a>
+        <hr class="my-1 border-gray-100">
+        <button
+          (click)="logout()"
+          class="w-full text-left block px-4 py-2 text-red-500 hover:bg-red-50 transition-colors font-medium"
+        >
+          Sign Out
+        </button>
+        } @else {
+        <a [routerLink]="['/login']" (click)="toggleUserMenu()" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors font-medium">
+          Sign In
+        </a>
+        <a [routerLink]="['/register']" (click)="toggleUserMenu()" class="block px-4 py-2 text-gray-600 hover:bg-gray-50 transition-colors">
+          Create Account
+        </a>
+        }
+      </div>
+      }
+    </div>
+<!--    -->
+    <div class="flex">
+      <img
+        class="size-5 cursor-pointer"
+        src="assets/icons/shopping-cart.svg"
+        alt="shopping cart icon"
+        (click)="toggleCart()"
+      />
+
+      <div
+        [class.invisible]="cartItemsCount() === 0"
+        class="flex justify-center items-center rounded-full bg-red-400 w-4 h-4 relative -top-1 right-2"
+      >
+        <p class="text-white text-xs ">{{ cartItemsCount() }}</p>
+      </div>
+    </div>
+
+
     @if (isCartOpen()) {
       <div class="fixed inset-0 bg-black/40 z-30" (click)="toggleCart()"></div>
     }

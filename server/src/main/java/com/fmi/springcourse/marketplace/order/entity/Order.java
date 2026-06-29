@@ -44,7 +44,7 @@ public class Order {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @NotEmpty
+//    @NotEmpty
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems = new ArrayList<>();
 
@@ -56,10 +56,18 @@ public class Order {
     @Column(nullable = false)
     private BigDecimal totalAmount;
 
+    @Column(name = "stripe_session_id")
+    private String stripeSessionId;
+
+    @NotNull
+    @Column(nullable = false)
+    private String status; // e.g., "PENDING", "PAID"
+
     public Order(User user, LocalDateTime orderDate) {
         this.user = user;
         this.orderDate = orderDate;
         this.totalAmount = BigDecimal.ZERO;
+        this.status = "PENDING"; // Defaults to pending
     }
 
     public void addItem(Product product, int quantity) {

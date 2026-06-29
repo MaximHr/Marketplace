@@ -1,5 +1,5 @@
 <div class="h-full w-[320px] bg-white shadow-lg px-6 py-5">
-  <div class="flex items-center justify-between">
+  <div class="flex items-center justify-between border-b-2 pb-4">
     <h2 class="text-lg font-semibold">Shopping Cart</h2>
     <img
       (click)="close()()"
@@ -7,5 +7,44 @@
       src="assets/icons/close.svg"
       alt="close icon"
     />
+  </div>
+
+  @if (cartItems().length === 0) {
+    <div class="text-left pt-4">
+      <p>Your cart is empty</p>
+    </div>
+  } @else {
+
+    <div class="flex flex-col gap-4 mt-4 thin-scrollbar overflow-y-auto ">
+      @for (item of cartItems(); track item.productId) {
+
+        <div class="relative group flex justify-between bg-gray-100 rounded-xl p-4 text-xs gap-2 hover:bg-gray-200 duration-300 ease-out">
+          <img class="w-10 h-10" [src]="url() + item.mainImage" alt="cart_item"/>
+          <p class="truncate text-wrap w-20 h-10">{{ item.productName }}</p>
+          <p class="w-6">x{{ item.quantity }}</p>
+          <p class="w-10">{{ item.price * item.quantity }}  €</p>
+          <div class="absolute bottom-2 right-3 opacity-0 group-hover:opacity-100 group-hover:block bg-white hover:bg-gray-200 flex items-center justify-center w-7 h-7 duration-300 ease-out">
+            <img
+              (click)="remove(item.productId)"
+              class="cursor-pointer w-7 hidden group-hover:block hover:bg-gray-200 rounded-full p-1 duration-300 ease-out"
+              src="assets/icons/close.svg"
+              alt="close icon"
+            />
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="border-t-2 pt-4 mt-4 text-right">
+      <p>Total Price: {{ cartTotalAmount() }}  €</p>
+    </div>
+  }
+
+  <div class="flex justify-center items-center">
+    <button class="border-2 justify-center align-items:center rounded-full mt-4 p-2 w-9/10 hover:text-lg hover:w-full hover:bg-gray-200 hover:p-4 hover:mt-2 duration-300 ease-out"
+            routerLink="/cart"
+            (click)="close()()">
+      View Cart
+    </button>
   </div>
 </div>

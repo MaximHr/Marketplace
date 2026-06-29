@@ -6,6 +6,7 @@ import { handleError } from '../../services/errorHandler';
 import { ToastrService } from 'ngx-toastr';
 import { environment } from '../../environment';
 import { LoadingDetails } from "./loading-details/loading-details";
+import { CartService } from "../../services/cart-service";
 
 @Component({
   selector: 'details-page',
@@ -14,6 +15,7 @@ import { LoadingDetails } from "./loading-details/loading-details";
 })
 export class Details implements OnInit {
   private service = inject(ProductService);
+  private cartService = inject(CartService);
   private activatedRoute = inject(ActivatedRoute);
 
   constructor(private toastr: ToastrService) {}
@@ -46,5 +48,16 @@ export class Details implements OnInit {
     return environment.imageStorage + path;
   }
 
-  addToCart(product: ProductDetails) {}
+  addToCart() {
+    // 1. Read the signal safely using extra parentheses: this.product()
+    const currentProduct = this.product();
+
+    // 2. Guard against the asynchronous race condition
+    if (!currentProduct) {
+      this.toastr.warning('Product data is still loading, please wait.');
+      return;
+    }
+
+    this.cartService.addProductToCart(currentProduct.id, this.qty());
+  }
 }

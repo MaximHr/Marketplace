@@ -38,9 +38,9 @@ public class Cart {
     private Long id;
 
     // FK
-    @NotNull
+    // @NotNull
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id") // nullable = false
     private User user;
 
     @NotNull
@@ -51,8 +51,15 @@ public class Cart {
     @Column(nullable = false)
     private BigDecimal totalAmount = BigDecimal.ZERO;
 
+    // UUID generated for anonymous users to track their cart without requiring authentication
+    private String guestToken;
+
     public Cart(User user) {
         this.user = user;
+    }
+
+    public Cart(String guestToken) {
+        this.guestToken = guestToken;
     }
 
     private void updateTotal() {
