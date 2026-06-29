@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 import { DropDown } from './dropdown/dropdown';
 import { Cart } from './cart/cart';
 import { Categroy } from '../../types/category';
-import { ProductService } from '../../services/product-service';
+import { CartService } from '../../services/cart-service';
 import { handleError } from '../../services/errorHandler';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth-service';
+import { ProductService } from '../../services/product-service';
 
 @Component({
   selector: 'app-navbar',
@@ -17,7 +18,8 @@ import { AuthService } from '../../services/auth-service';
   imports: [Searchbar, RouterLink, DropDown, Cart],
 })
 export class Navbar implements OnInit {
-  private service = inject(ProductService);
+  private productService = inject(ProductService);
+  private cartService = inject(CartService);
   private authService = inject(AuthService);
   private router = inject(Router);
   private toastr = inject(ToastrService);
@@ -31,20 +33,20 @@ export class Navbar implements OnInit {
   isUserMenuOpen = signal<boolean>(false);
   isLoggedIn = computed(() => !!this.authService.currentUserToken());
 
-  cart = computed(() => this.service.cartState());
+  cart = computed(() => this.cartService.cartState());
   cartItemsCount = computed(() => this.cart()?.totalItems ?? 0);
 
   ngOnInit() {
-    this.service
+    this.productService
       .listCategories()
       .subscribe({
-        next: (categories) => {
+        next: (categories: Categroy[]) => {
           this.categories.set(categories);
         },
-        error: (err) => handleError(err, this.toastr),
+        error: (err: any) => handleError(err, this.toastr),
       });
 
-    this.service.getShoppingCart();
+    this.cartService.getShoppingCart();
   }
 
   toggleOpen() {

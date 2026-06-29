@@ -8,6 +8,7 @@ import { handleError } from '../../services/errorHandler';
 import { PaginationController } from '../../components/pagination-controller/pagination-controller';
 import { form, FormField } from '@angular/forms/signals';
 import { environment } from '../../environment';
+import { inject } from '@angular/core';
 
 @Component({
   selector: 'products-page',
@@ -17,10 +18,10 @@ import { environment } from '../../environment';
 export class ProductsPage {
   private sortText = signal<'createdAt,desc' | 'price,desc' | 'price,asc'>('createdAt,desc');
 
-  constructor(
-    private toastr: ToastrService,
-    private service: ProductService,
-  ) {
+  private toastr = inject(ToastrService);
+  private service = inject(ProductService);
+
+  constructor() {
     effect((onCleanup) => {
       const params = {
         ...this.pageInfo(),
@@ -28,12 +29,12 @@ export class ProductsPage {
       };
 
       const sub = this.service.listProducts(params).subscribe({
-        next: (products) => {
+        next: (products: any) => {
           this.products.set(products.content);
           this.totalElements.set(products.totalElements);
           this.totalPages.set(products.totalPages);
         },
-        error: (err) => handleError(err, this.toastr),
+        error: (err: any) => handleError(err, this.toastr),
       });
 
       onCleanup(() => sub.unsubscribe());
